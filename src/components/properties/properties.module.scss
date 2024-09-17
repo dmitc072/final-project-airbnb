@@ -1,0 +1,86 @@
+.container{
+    width:100%;
+    height:auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap; //this and align-content allow to have each contect center on the page
+    align-content: center;
+}
+
+.location{
+    width:75%;
+    max-width: 720px;
+    height:auto;
+    border: 1px solid black;
+    padding:20px;
+    border-radius: 20px;
+    margin-bottom:20px ;
+    display:flex;
+    flex-direction:row;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+.pictureContainer{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.email {
+margin-top: 90px;
+}
+
+.row{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.column{
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.titles{
+    display:flex;
+    flex-direction: row;
+}
+
+.info{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-width: 150px
+}
+
+.section {
+    // display:flex;
+    // flex-direction: column;
+    // border: 1px solid black;
+    padding:2px 22px 12px 22px;
+    //justify-content: center;
+
+}
+
+.number {
+    display:flex;
+    flex-direction: column;
+    padding-right:20px;
+    justify-content: center;
+    border-right: 1px solid black;
+
+}
+
+.description{
+    width:250px;
+    display:flex;
+    //justify-content: center;
+    // flex-wrap: wrap; //use this and align-content if this className is connected with .section
+    // align-content: center;
+}
+
+.button{
+    max-width:300px
+}
