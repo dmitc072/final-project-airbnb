@@ -1,0 +1,72 @@
+.container{
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 22px;
+    height:auto;
+    width: 600px;
+    box-shadow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  @media screen and (max-width:620px){
+    .container{
+        width:400px;
+    }
+  }
+.mainImage{
+    max-width: 244px;
+    width:100%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 1px;
+    margin-bottom: 10px;
+}
+
+.otherImages{
+    width:100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 1px;
+    margin-bottom: 10px;
+}
+
+.noImage{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0; // Light gray background for no image
+    border-radius: 10px;
+    border: 1px solid #ddd; // Optional border for bette
+    }
+
+.center{
+    display:flex;
+    justify-content: center;
+}
+
+.modal{
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.modalImage{
+    max-width: 100%;  // Responsive breakpoints are simplified with 'max-width'
+    width: 550px;
+    height: auto;
+
+}
+
+.button{
+    max-width: 100%;  
+    display: flex;
+    justify-content: center;
+}
