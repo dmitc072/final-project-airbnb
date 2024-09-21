@@ -8,6 +8,7 @@ import { Properties } from '../properties/Properties.js';
 import { Box, Button, Typography } from '@mui/material';
 import { useDispatch } from "react-redux";
 import { AdvertiseProperty } from '../advertiseProperty/AdevertiseProperty.js';
+import { Message} from "../message/Message.js"
 
 export const DashboardRoute = () => {
     const { user } = useSelector((state) => state.auth)
@@ -38,6 +39,7 @@ console.log (user)
                 <Route path="home" element={<Home />} />
                 <Route path="properties" element={<Properties />} />
                 <Route path="advertiseproperty" element={<AdvertiseProperty />} />
+                <Route path="message" element={<Message />} />
 
             </Route>
         </Routes>
