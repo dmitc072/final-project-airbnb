@@ -4,7 +4,7 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../../context";
 import styles from "./searchResults.module.scss"
-import { Availability } from "../availability/Availability";
+import { AvailabilityModal } from "../availability/AvailabilityModal";
 
 
 export const SearchResults = ({ searchResult }) => {
@@ -60,6 +60,7 @@ export const SearchResults = ({ searchResult }) => {
     setPropertyData(result);
     setOpenRentModal(true)
     
+  
   }
 
   return (
@@ -85,7 +86,7 @@ export const SearchResults = ({ searchResult }) => {
           </div>
         </Box>
       </Modal>
-      <Availability openRentModal={openRentModal} setOpenRentModal={setOpenRentModal} propertyData={propertyData}/>
+      <AvailabilityModal openRentModal={openRentModal} setOpenRentModal={setOpenRentModal} propertyData={propertyData}/>
       {/* Display per property */}
       <Box sx={{ ...row, display: 'flex', flexWrap: 'wrap', alignItems:"flex-start", gap: 2 }}>
         {searchResult.map((result, index) => (

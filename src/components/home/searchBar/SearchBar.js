@@ -30,7 +30,7 @@ export const SearchBar = ({ setSearchResult }) => {
           const locationSnapshot = await getDocs(locationCollectionRef);
           
           locationSnapshot.forEach(locationDoc => {
-            locationsArray.push(locationDoc.data()); // Push data into the temporary array
+            locationsArray.push({...locationDoc.data(),user:userDoc.id}); // Push data into the temporary array and retrieve the user
           });
           //console.log(locationsArray)
         }
