@@ -47,7 +47,7 @@ const NAVIGATION = [
     icon: <FormatListBulletedIcon />,
   },
   {
-    segment: 'dashboard/properties',
+    segment: 'dashboard/message',
     title: 'Message',
     icon: <MessageIcon />,
   },
