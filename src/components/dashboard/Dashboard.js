@@ -9,6 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../../features/users/users';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { theme } from '../../Theme'; //have to call theme again eventhough it is wrapped around the who page
+import MessageIcon from '@mui/icons-material/Message';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import SearchIcon from '@mui/icons-material/Search';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 import {AppContext} from "../../context.js"
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore"; 
@@ -29,18 +33,23 @@ const NAVIGATION = [
   },
   {
     segment: 'dashboard/home', //segment routes you to the page from DashboardRoute
-    title: 'Home',
-    icon: <TimelineIcon />,
+    title: 'Search',
+    icon: <SearchIcon />,
   },
   {
     segment: 'dashboard/advertiseproperty',
     title: 'Advertise Property',
-    icon: <DashboardIcon />,
+    icon: <LoyaltyIcon />,
   },
   {
     segment: 'dashboard/properties',
-    title: 'Properties',
-    icon: <DashboardIcon />,
+    title: 'Listing Properties',
+    icon: <FormatListBulletedIcon />,
+  },
+  {
+    segment: 'dashboard/properties',
+    title: 'Message',
+    icon: <MessageIcon />,
   },
 ];
 
