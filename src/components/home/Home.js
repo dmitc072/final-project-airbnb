@@ -7,6 +7,7 @@ export const Home = () => {
 
     return (
         <>
+        
         <SearchBar setSearchResult = {setSearchResult} />{/*Passing setSearchResult as a parameter to use in another component in here*/}
         <SearchResults searchResult = {searchResult} />
 

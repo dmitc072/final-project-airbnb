@@ -1,0 +1,102 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    margin: 0 10px;
+    width:auto;
+    justify-content: center;
+    align-items: stretch; /* Ensures children stretch to the container's full height */
+    @media screen and (max-width:590px){
+            flex-wrap: wrap; 
+    }
+}
+
+.messageTitle {
+    width: 15%;
+    min-width: 200px;
+    //margin-left: 20px;
+    
+}
+
+.line {
+    height: 90vh;
+    width: .5px;
+    background-color: grey;
+    margin-left: 10px;
+}
+
+.message {
+    flex-grow: 1; /* Allows the message to take the remaining space */
+    padding-left: 10px; 
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.messageContainer {
+    width: 100%;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.messageBox {
+    width: 100%; 
+    max-width: 500px; 
+    height: auto;
+    max-height: 610px;
+    border: .5px solid grey;
+    border-radius: 20px;
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden; /* Prevent overflow issues */
+}
+.displayMessage {
+    text-align: left;
+    overflow-wrap: break-word;
+    margin: 10px;
+    height: auto;
+    width: auto;
+}
+
+.returnMessageHost{
+    width: 100%;
+    //display:flex; //need for the child to use flex-grow
+    flex-direction: column;
+}
+
+.returnMessageRenter{
+    position: relative;
+    left: 40%;
+    width: 100%;
+    display:flex; 
+    flex-direction: column;
+}
+
+.host{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    width:fit-content;
+    width:60%;
+    border-radius: 0 20px 20px 0;
+    padding: 5px 20px;
+    margin:10px 0;
+    background-color:#B8F3FF;
+}
+
+.renter {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 60%; /* Keep this for the desired width */
+    border-radius: 20px 0 0 20px;
+    padding: 5px 20px;
+    margin: 10px 0;
+    background-color: #346c77;
+    color:white
+}
