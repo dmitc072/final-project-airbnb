@@ -57,7 +57,8 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
         const locationSnapshot = await addDoc(locationCollectionRef, { //Since odd path and not even, I have to use collect
           fromDate: formatFromDate,
           toDate: formattedToDate,
-          requestingUser:user.email
+          requestingUser:user.email,
+          status:"unknown"
           
         })
       } catch (error){
@@ -69,6 +70,9 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
       fromDate: formatFromDate,
       toDate: formattedToDate
     }, "Property Data: ",propertyData.user);
+    alert("Request is sent!")
+    onClose()
+
   };
 
 

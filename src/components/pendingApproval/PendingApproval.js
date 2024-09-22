@@ -69,7 +69,7 @@ useEffect(() => {
                 <Typography variant="h5">Pending Property Request</Typography>
                 <br/>
                 {filterPendingPorpertiesData.map((pendingProperty) => (
-                <div className={styles.pendingProperties}>
+                <div key={pendingProperty.propertyId} className={styles.pendingProperties}>
                     <div>
                         <Typography>Property Name:</Typography>
                         <div className={styles.data}>{pendingProperty.propertyData.propertyName}</div>
@@ -97,7 +97,7 @@ useEffect(() => {
                     <div className={styles.line}></div>
                     <div>
                         <Typography>Price:</Typography>
-                        <div className={styles.data}>{pendingProperty.propertyData.pricePerNight}</div>
+                        <div className={styles.data}>{`$${pendingProperty.propertyData.pricePerNight}`}</div>
                     </div>
                     <div className={styles.line}></div>
                     <div>
@@ -106,11 +106,16 @@ useEffect(() => {
                     </div>
                     <div>
                         <Typography>From:</Typography>
-                        <div className={styles.data}>{pendingProperty.pendingApprovals[0].fromDate}</div>
+                             {pendingProperty.pendingApprovals.map((from, index) => (
+                                <div key={index} className={styles.data}>{from.fromDate}</div>
+                            ))}
                     </div>
                     <div>
                         <Typography>To:</Typography>
-                        <div className={styles.data}>{pendingProperty.pendingApprovals[0].toDate}</div>
+                        {pendingProperty.pendingApprovals.map((to, index)=>(
+                             <div key={index} className={styles.data}>{to.toDate}</div>
+                        ))}
+                       
                     </div>
                 </div>
                 
