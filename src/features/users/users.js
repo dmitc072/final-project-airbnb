@@ -2,7 +2,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { auth, db } from '../../api/firebase-config';
 import { signInWithEmailAndPassword, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useSelector } from 'react-redux';
 
 // Define an async thunk for user sign-in
 export const signinUser = createAsyncThunk(
@@ -36,7 +37,8 @@ export const signinUser = createAsyncThunk(
         isRenterChecked: userInfo.isRenterChecked || true,
         isProfileComplete: userInfo.isProfileComplete || false,
         isFirstLogin: userInfo.isFirstLogin,
-        hostIsVerified:userInfo.hostIsVerified || false
+        hostIsVerified:userInfo.hostIsVerified || false,
+        pendingApprovalMessage:userInfo.pendingApprovalMessage || false //true didn't work, so I used false
       };
 
       return { data: serializedUser, status: 200 };
@@ -47,10 +49,22 @@ export const signinUser = createAsyncThunk(
 );
 
 // Define an async thunk for user sign-out
-export const signOut = createAsyncThunk('auth/signOut', async () => {
-  await firebaseSignOut(auth);
+export const signOut = createAsyncThunk('auth/signOut', async (_, { getState }) => {
+  const state = getState();
+  const user = state.auth.user; // Access the current user from the state
+
+  if (user) {
+    const userDocRef = doc(db, "users", user.email); 
+
+    // Update pendingApprovalMessage in Firestore
+    await setDoc(userDocRef, { pendingApprovalMessage: false }, { merge: true });
+
+    await firebaseSignOut(auth); 
+  }
+
   return null;
 });
+
 
 // Define the slice
 const userSlice = createSlice({
@@ -82,6 +96,9 @@ const userSlice = createSlice({
     setHostIsVerified: (state, action) => {
       if (state.user) state.user.hostIsVerified = action.payload;
     },
+    setPendingApprovalMessage: (state, action) => {
+      if (state.user) state.user.pendingApprovalMessage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -103,6 +120,9 @@ const userSlice = createSlice({
       .addCase(signOut.fulfilled, (state) => {
         state.loading = false;
         state.user = null;
+        // if(state.user){
+        //   state.user.pendingApprovalMessage = false
+        // }
       })
       .addCase(signOut.rejected, (state, action) => {
         state.loading = false;
@@ -137,7 +157,8 @@ export const initializeAuth = () => async (dispatch) => {
             isRenterChecked: userInfo.isRenterChecked || true,
             isProfileComplete: userInfo.isProfileComplete || false,
             isFirstLogin: userInfo.isFirstLogin ,
-            hostIsVerified:userInfo.hostIsVerified || false
+            hostIsVerified:userInfo.hostIsVerified || false,
+            pendingApprovalMessage:userInfo.pendingApprovalMessage || false
 
           };
 
@@ -159,7 +180,9 @@ export const {
   setIsFirstLogin,
   setPhotoURL,
   setUser,
-  setHostIsVerified
+  setHostIsVerified,
+  setPendingApprovalMessage
+
 } = userSlice.actions;
 
 export default userSlice.reducer;
