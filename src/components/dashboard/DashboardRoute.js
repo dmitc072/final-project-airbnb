@@ -9,7 +9,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { useDispatch } from "react-redux";
 import { AdvertiseProperty } from '../advertiseProperty/AdevertiseProperty.js';
 import { Message} from "../message/Message.js"
-
+import {PendingApproval} from "../pendingApproval/PendingApproval.js"
 export const DashboardRoute = () => {
     const { user } = useSelector((state) => state.auth)
     const navigate = useNavigate();
@@ -40,6 +40,8 @@ console.log (user)
                 <Route path="properties" element={<Properties />} />
                 <Route path="advertiseproperty" element={<AdvertiseProperty />} />
                 <Route path="message" element={<Message />} />
+                <Route path="pendingapproval" element={<PendingApproval />} />
+
 
             </Route>
         </Routes>
