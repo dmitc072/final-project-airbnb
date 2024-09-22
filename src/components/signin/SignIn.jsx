@@ -28,14 +28,15 @@ export const SignIn = () =>{
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const {user} = useSelector(state => state.auth)
   
     const handleMouseDownPassword = (event) =>event.preventDefault();
 
     const dispatch = useDispatch();
-    const {isProfileComplete} = useSelector((state) => {
-        console.log(state.auth); // Check the full state structure
-        return state.auth;
-      });
+    // const {isProfileComplete} = useSelector((state) => {
+    //     console.log(state.auth); // Check the full state structure
+    //     return state.auth;
+    //   });
 
 
 
@@ -57,32 +58,23 @@ export const SignIn = () =>{
 
     const onSubmit = async (data) => {
         try {
-            console.log(data);
+            console.log("Submitted Data:", data);
             const response = await dispatch(signinUser(data)).unwrap();
-    
-            // Check if response is defined and contains the necessary properties
-            if (response) {
+            
+            if (response && user) {
+                console.log("Response:", response);
                 if (response.status === 200) {
-                    // Authentication was successful
-                   if(!isProfileComplete) {
-                    navigate('/dashboard/profile')
-                   }else {navigate('/dashboard')}; // Redirect or take appropriate action
+                    // Successful authentication
+                    navigate(response.isProfileComplete ? '/dashboard/profile' : '/dashboard');
                 } else if (response.status === 201) {
-                    alert(response.message); // Show alert for successful signup or "user already exist"
+                    alert(response.message);
                 }
             } else {
                 throw new Error('Unexpected response format');
             }
         } catch (error) {
-            if (error.status === 401) {
-                alert(error.message); // Show alert for wrong password
-            } else if (error.status === 404) {
-                alert(error.message); // Show alert for user not found
-            } else {
-                //console.error("Failed to log in: ", error.message);
-                alert("Email/User Name or Password Incorrect!")
-                // Optionally handle other unexpected status codes
-            }
+            console.error("Login Error:", error);
+            alert("Email/User Name or Password Incorrect!");
         }
     };
     
