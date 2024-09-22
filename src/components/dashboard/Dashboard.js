@@ -13,7 +13,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import SearchIcon from '@mui/icons-material/Search';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-
+import PendingIcon from '@mui/icons-material/Pending';
 import {AppContext} from "../../context.js"
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore"; 
 import { db } from "../../api/firebase-config.js";
@@ -50,6 +50,11 @@ const NAVIGATION = [
     segment: 'dashboard/message',
     title: 'Message',
     icon: <MessageIcon />,
+  },
+  {
+    segment: 'dashboard/pendingapproval',
+    title: 'Pending Approval',
+    icon: <PendingIcon />,
   },
 ];
 
