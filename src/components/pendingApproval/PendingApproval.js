@@ -1,18 +1,24 @@
 import { Typography } from "@mui/material"
 import styles from "./pendingApproval.module.scss"
-import { useEffect, useState } from "react"
-import { collection, doc, getDocs } from "firebase/firestore"
-import { db } from "../../api/firebase-config"
-import { useSelector } from "react-redux"
+import { useEffect, useState } from "react";
+import { collection, doc, getDocs } from "firebase/firestore";
+import { db } from "../../api/firebase-config";
+import { useSelector } from "react-redux";
+import {PendingApprovalforRenter} from "./PendingApprovalforRenter.js";
+import {PendingApprovalforHost} from "./PendingApprovalforHost.js";
+import {PendingApprovalMessages} from "./PendingApprovalMessages.js"
+
+
 
 export const PendingApproval = () => {
 const [pendingPropertiesData,setpendingPropertiesData] = useState([])
 const { user } = useSelector((state) => state.auth);
 const [loading, setLoading] = useState(true)
+const {isHostChecked, isRenterChecked} = useSelector(state =>state.auth.user)
 
 const filterPendingPorpertiesData = pendingPropertiesData.filter((property) => property.pendingApprovals[0]?.requestingUser === user.email)
 
-//retrieves the data for from PendingApproval collection
+//retrieves the data for from PendingApproval collection for Tentants/Renter
 useEffect(() => {
     const fetchData = async () => {
         try {
@@ -61,67 +67,32 @@ useEffect(() => {
 
 
 
-    console.log("Properties: ",filterPendingPorpertiesData)
+    // console.log("Properties: ",filterPendingPorpertiesData)
+    // console.log("isHostChecked: ",isHostChecked, "isRenterChecked: ",isRenterChecked )
+
     return (
         <>
-        {!loading && 
-            <div className={styles.container}>
-                <Typography variant="h5">Pending Property Request</Typography>
+
+        {!loading ? (
+            <>
+            {isHostChecked ? (
+            <>
+            <PendingApprovalMessages/>
+
+                <PendingApprovalforHost filterPendingPorpertiesData={filterPendingPorpertiesData}/>
                 <br/>
-                {filterPendingPorpertiesData.map((pendingProperty) => (
-                <div key={pendingProperty.propertyId} className={styles.pendingProperties}>
-                    <div>
-                        <Typography>Property Name:</Typography>
-                        <div className={styles.data}>{pendingProperty.propertyData.propertyName}</div>
-                    </div>
-                    <div className={styles.line}></div>
-                    <div>
-                        <Typography>Address:</Typography>
-                        <div className={styles.data}>{pendingProperty.propertyData.address}</div>
-                    </div>
-                    <div className={styles.line}></div>
-                    <div>
-                        <Typography>City:</Typography>
-                        <div className={styles.data}>{pendingProperty.propertyData.city}</div>
-                    </div>
-                    <div className={styles.line}></div>
-                    <div>
-                        <Typography>State:</Typography>
-                        <div className={styles.data}>{pendingProperty.propertyData.state}</div>
-                    </div>
-                    <div className={styles.line}></div>
-                    <div>
-                        <Typography>Zip Code:</Typography>
-                        <div className={styles.data}>{pendingProperty.propertyData.zipCode}</div>
-                    </div>
-                    <div className={styles.line}></div>
-                    <div>
-                        <Typography>Price:</Typography>
-                        <div className={styles.data}>{`$${pendingProperty.propertyData.pricePerNight}`}</div>
-                    </div>
-                    <div className={styles.line}></div>
-                    <div>
-                        <Typography>POC:</Typography>
-                        <div className={styles.data}>{pendingProperty.propertyData.contactEmail}</div>
-                    </div>
-                    <div>
-                        <Typography>From:</Typography>
-                             {pendingProperty.pendingApprovals.map((from, index) => (
-                                <div key={index} className={styles.data}>{from.fromDate}</div>
-                            ))}
-                    </div>
-                    <div>
-                        <Typography>To:</Typography>
-                        {pendingProperty.pendingApprovals.map((to, index)=>(
-                             <div key={index} className={styles.data}>{to.toDate}</div>
-                        ))}
-                       
-                    </div>
-                </div>
-                
-                ))}
-            </div>
-        }
+                <PendingApprovalforRenter filterPendingPorpertiesData={filterPendingPorpertiesData}/>
+           </>
+            ) : isRenterChecked ? (
+                /* For tentant/renters */
+                <PendingApprovalforRenter filterPendingPorpertiesData={filterPendingPorpertiesData}/>
+            ) :null}
+            </>
+        ) : (
+                <div>Loading...</div>
+            ) 
+        
+        }    
         </>
     )
 }
