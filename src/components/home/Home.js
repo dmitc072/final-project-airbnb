@@ -86,7 +86,7 @@ export const Home = () => {
     
     return (
         <>
-            <PendingApprovalMessages/>
+            <PendingApprovalMessages/> {/*send a message out for host if there is a pending request and redirects to pernding page*/}
             <SearchBar setSearchResult={setSearchResult} /> {/* Passing setSearchResult as a parameter */}
             <SearchResults searchResult={searchResult} />
             

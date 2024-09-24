@@ -1,8 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import TimelineIcon from '@mui/icons-material/Timeline';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,11 +12,10 @@ import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import SearchIcon from '@mui/icons-material/Search';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PendingIcon from '@mui/icons-material/Pending';
-import {AppContext} from "../../context.js"
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore"; 
-import { db } from "../../api/firebase-config.js";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Home } from '../home/Home.js';
+import { ThemeProvider } from '@mui/material/styles'
+
 
 const NAVIGATION = [
   {
@@ -58,24 +55,6 @@ const NAVIGATION = [
   },
 ];
 
-const demoTheme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: 'data-toolpad-color-scheme',
-  },
-  colorSchemes: { light: true, dark: true },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-
-
 
 export const Dashboard = () => {
   const dispatch = useDispatch(); //used to signin and signout
@@ -93,40 +72,40 @@ export const Dashboard = () => {
   };
 
   return (
-    <AppProvider
-      branding={{
-        logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
-        title: 'MUI',
-      }}
-      navigation={isHostChecked ? 
-        NAVIGATION.map((navItem) => ({
-          ...navItem,
-        }))
-      :  
-      NAVIGATION.filter((hostInfo,index)=> index != 3 && index != 4).map((navItem) => ({ //filter out properties(index 3) and map everything else
+<AppProvider
+  branding={{
+    logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
+    title: 'MUI',
+  }}
+  navigation={isHostChecked
+    ? NAVIGATION.map((navItem) => ({
         ...navItem,
       }))
-      }
-      theme={theme}
-    >
-      <DashboardLayout>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            width: '100%',
-            position:"static",
-          }}
-        >
-          <Button variant="contained" onClick={handleSignOut}>
-            Sign out
-          </Button>
-        </Box>
-        <Outlet /> {/* This is where the child routes will be rendered */}
-        {location.pathname === '/dashboard' && <Home />} {/*If location equal /dashboard, show Home.js*/}
+    : NAVIGATION.filter((_, index) => index !== 3 && index !== 4).map((navItem) => ({
+        ...navItem,
+      }))
+  }
+>
+  <ThemeProvider theme={theme}>
+    <DashboardLayout>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          width: '100%',
+          position: 'static',
+        }}
+      >
+        <Button variant="contained" onClick={handleSignOut}>
+          Sign out
+        </Button>
+      </Box>
+      <Outlet /> {/* Render child routes */}
+      {location.pathname === '/dashboard' && <Home />} {/* Show Home.js if path is /dashboard */}
+    </DashboardLayout>
+  </ThemeProvider>
+</AppProvider>
 
-      </DashboardLayout>
-    </AppProvider>
   );
 };
 

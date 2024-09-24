@@ -1,49 +1,45 @@
 import { useState } from "react";
-import styles from "./messages.module.scss"
-import { Box, Button, Container, Typography, useMediaQuery, TextField } from "@mui/material";
-
+import styles from "./messages.module.scss";
+import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 
 export const Message = () => {
     const mobileView = useMediaQuery("(max-width: 590px)");
-    const [message,setMessage] = useState("")
+    const [message, setMessage] = useState("");
 
- 
-    return(
+    return (
         <>
             <div className={styles.container}>
                 <div className={styles.messageTitle}>
-        ccd
+                    Message Title
                 </div>
                 {!mobileView && <div className={styles.line}></div>}
                 <div className={styles.message}>
-                <div className={styles.messageContainer}> 
-                    <Typography variant="h5">Message</Typography>  
-                    <div className={styles.messageBox}>
-                        <textarea className={styles.displayMessage} fullWidth  multiline rows={4} onChange={()=>setMessage(message)}>
-                            {message}
-                        </textarea>
-                        <Button>
-                            Submit
-                        </Button>
+                    <div className={styles.messageContainer}>
+                        <Typography variant="h5">Message</Typography>
+                        <div className={styles.messageBox}>
+                            <textarea
+                                className={styles.displayMessage}
+                                rows={4}
+                                value={message} // Use value prop
+                                onChange={(e) => setMessage(e.target.value)} // Update state on change
+                            />
+                            <Button onClick={() => {/* Handle submit */}}>Submit</Button>
+                        </div>
                     </div>
-                </div>
-                <br/>
-                {/*map here*/}
-                <div className={styles.returnMessageRenter}>
-                    <div className={styles.renter}>
-                    To have the .message class fit the remaining space on the side of the title and line, you can adjust the CSS to allow it to take up the full width of the container. Here’s how you can modify your styles: 
+                    <br />
+                    {/* Mapping can go here */}
+                    <div className={styles.returnMessageRenter}>
+                        <div className={styles.renter}>
+                            dd
+                        </div>
                     </div>
-                </div>
-                <div className={styles.returnMessageHost}>
-                    <div className={styles.host}>
-                        
-To have the .message class fit the remaining space on the side of the title and line, you can adjust the CSS to allow it to take up the full width of the container. Here’s how you can modify your styles: 
+                    <div className={styles.returnMessageHost}>
+                        <div className={styles.host}>
+                           dd
+                        </div>
                     </div>
-                </div>
-                     
-                  
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
