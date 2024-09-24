@@ -1,90 +1,92 @@
 import { SearchResults } from '../home/searchResults/SearchResults.js';
 import { SearchBar } from '../home/searchBar/SearchBar.js';
-import { useEffect, useState } from "react";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { db } from "../../api/firebase-config";
-import { useDispatch, useSelector } from 'react-redux';
-import {AppContext} from '../../context.js';
+import {useEffect, useState} from "react"
+import { useSelector,useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
+import { db } from '../../api/firebase-config.js';
 import {setPendingApprovalMessage} from "../../features/users/users.js"
+import { PendingApprovalMessages } from '../pendingApproval/PendingApprovalMessages.js';
+
 
 export const Home = () => {
     const [searchResult, setSearchResult] = useState([]);
-    const { user } = useSelector((state) => state.auth);
-    const [message, setMessage] = useState([]);
-    const [showAlert, setShowAlert] = useState(false); // Flag to control alert display for not displaying twice
     const {pendingApprovalMessage} = useSelector(state => state.auth.user)
+    const navigate = useNavigate();
+    const {user} = useSelector(state => state.auth)
     const dispatch = useDispatch();
 
-    // Fetching properties and pending approvals
-    useEffect(() => {
-        if(user && !pendingApprovalMessage){
-            const fetchRequest = async () => {
-                try {
-                    // Collection reference for user's properties
-                    const newRequest = collection(db, "users", user.email, "properties");
-                    const newRequestRef = await getDocs(newRequest);
 
-                    const pendingArray = [];
+    // useEffect(()=>{
+    //     if (!pendingApprovalMessage) {
+    //         // Navigate to pending approval page if there are pending requests
+    //         navigate('/dashboard/pendingapproval');
+    //     } 
+    // },[pendingApprovalMessage])
+    
+    
+    // useEffect(() => {
+    //     const checkPendingApprovals = async () => {
+    //         try {
+    //             const queryUsers = await getDocs(collection(db, "users"));
+    //             let hasPendingApproval = false;
+    
+    //             // Loop through users
+    //             for (let userDoc of queryUsers.docs) {
+    //                 const user = userDoc.id
+    //                 const propertiesSnapshot = await getDocs(collection(db, "users", user, "properties"));
+                    
+    //                 // Loop through properties of each user
+    //                 for (let propertyDoc of propertiesSnapshot.docs) {
+    //                     const property = propertyDoc.id;
+    //                     const pendingApprovalSnapshot = await getDocs(collection(db, "users", user, "properties", property, "PendingApproval"));
+    //                     console.log("property",property ,"has pending:",hasPendingApproval)
 
-                    // Loop through properties to check for PendingApproval
-                    await Promise.all(
-                        newRequestRef.docs.map(async (property) => {
-                            const propertiesRef = collection(db, "users", user.email, "properties", property.id, "PendingApproval");
-                            const propertiesSnapshot = await getDocs(propertiesRef);
+    //                     // Check if any pending approval exists
+    //                     if (!pendingApprovalSnapshot.empty) {
+    //                         console.log("property Pending",property)
+    //                         const pendingApprovalDocs = pendingApprovalSnapshot.docs;
+    //                         const isApprovalPending = pendingApprovalDocs.some(doc => doc.data().requestingUser === userDoc.id);
+    //                         console.log("is pending",isApprovalPending)
 
-                            // If there are pending approvals, push them into the array
-                            if (!propertiesSnapshot.empty) {
-                                propertiesSnapshot.docs.forEach(doc => {
-                                    const pendingData = doc.data(); // Store doc.data() in a variable to verify status
+    //                         if (isApprovalPending) {
+    //                             hasPendingApproval = true;
+    //                             break;
+    //                         }
+    //                     }
+    //                 }
 
-                                    if (pendingData.status === "unknown") { // Check the status
-                                        pendingArray.push({
-                                            ...pendingData,
-                                            propertyName: property.data().propertyName // Add property name from the parent document
-                                        });
-                                    }
-                                });
-                            }
-                        })
-                    );
+    //                 // If there's already pending approval, navigate to the page
+    //                 if (hasPendingApproval)break
+    //             }
 
-                    setMessage(pendingArray);
-                    dispatch(setPendingApprovalMessage(true));
+    //             // Update the user's pendingApprovalMessage field based on the result
+    //             if (!hasPendingApproval) {
+    //                 console.log("Removing pending message");
+                    
+    //                 // Wait for the Firebase operation to complete
+    //                 await setDoc(doc(db, "users", user.email), { pendingApprovalMessage: false }, { merge: true });
+    //                 dispatch(setPendingApprovalMessage(false));
 
-                    const updatePending = async () =>{
-                        try {
-                            const querySnapshot = await doc(db,"users",user.email)
-                            const update = setDoc(querySnapshot,
-                                {pendingApprovalMessage:true,},
-                                {merge:true}
-                            )
-                        }catch(error){
-                            console.error("Could not update Pending Message:", error)
-                        }
-                    }
-
-                    updatePending()
-               
-                } catch (error) {
-                    console.error("Error fetching properties and pending approvals:", error);
-                }
-            };
-
-            fetchRequest(); // Fetch data on component mount
-        }
-    }, [user.id]);
-
-
-    useEffect(()=>{ //creating the alert in this useEffect instead of the one above makes it display once
-        if (!showAlert && message.length > 0) {
-            setShowAlert(true); // Set showAlert to true after alert is shown
-            alert(message.map((pendingItem) => `${pendingItem.propertyName} is pending approval`).join("\n"));
-        }
-    },[message])
-    //console.log("pending," ,message )
-
+    //                 // Add a slight delay to allow the Redux state to update
+    //                 setTimeout(() => {
+    //                     console.log("Redux state after dispatch:", pendingApprovalMessage);
+                 
+    //                 }, 1500);
+    //             }
+          
+                
+    //         } catch (error) {
+    //             console.error("Error checking pending approvals: ", error);
+    //         }
+    //     };
+    
+    //     checkPendingApprovals();
+    // }, [db, user.email]);
+    
     return (
         <>
+            <PendingApprovalMessages/>
             <SearchBar setSearchResult={setSearchResult} /> {/* Passing setSearchResult as a parameter */}
             <SearchResults searchResult={searchResult} />
             

@@ -57,26 +57,39 @@ export const SignIn = () =>{
     
 
     const onSubmit = async (data) => {
-        try {
-            console.log("Submitted Data:", data);
-            const response = await dispatch(signinUser(data)).unwrap();
-            
-            if (response && user) {
-                console.log("Response:", response);
-                if (response.status === 200) {
-                    // Successful authentication
-                    navigate(response.isProfileComplete ? '/dashboard/profile' : '/dashboard');
-                } else if (response.status === 201) {
-                    alert(response.message);
-                }
+    try {
+        console.log("Submitted Data:", data);
+        const response = await dispatch(signinUser(data)).unwrap();
+
+        console.log("Response:", response);
+
+        if (response) {
+            const { status, isProfileComplete, message, pendingApprovalMessage,isHostChecked } = response;            //I assume this helped with loggin in twice
+
+
+            if (status === 200) {
+                // Successful authentication
+                // if (pendingApprovalMessage && isHostChecked) {
+                //     // Navigate to pending approval page if there are pending requests
+                //     navigate('/dashboard/pendingapproval');
+                // } else {
+                //     // Navigate based on profile completion
+                    navigate(isProfileComplete ? '/dashboard/profile' : '/dashboard');
+                         
+             } else if (status === 201) {
+                alert(message || "Profile is not complete."); // Provide a fallback message
             } else {
-                throw new Error('Unexpected response format');
+                throw new Error('Unexpected status code');
             }
-        } catch (error) {
-            console.error("Login Error:", error);
-            alert("Email/User Name or Password Incorrect!");
+        } else {
+            throw new Error('Response is undefined');
         }
-    };
+    } catch (error) {
+        console.error("Login Error:", error);
+        alert("Email/User Name or Password Incorrect!");
+    }
+};
+
     
     
     

@@ -61,6 +61,7 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
           status:"unknown"
           
         })
+        await setDoc(doc(db, "users", propertyData.user), { pendingApprovalMessage: true }, { merge: true });
       } catch (error){
         console.error("Error Sending Message:",error)
       }
