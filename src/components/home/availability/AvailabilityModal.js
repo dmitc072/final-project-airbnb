@@ -45,8 +45,8 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
             return
         }
 
-        const formatFromDate = fromDate.format('DD/MM/YYYY')
-        const formattedToDate = toDate.format('DD/MM/YYYY');
+        const formatFromDate = fromDate.format('MM/DD/YYYY')
+        const formattedToDate = toDate.format('MM/DD/YYYY');
 
 
     //sends from, to, and user to the location doc

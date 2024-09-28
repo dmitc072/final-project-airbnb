@@ -10,6 +10,7 @@ import { theme } from '../../Theme'; //have to call theme again eventhough it is
 import MessageIcon from '@mui/icons-material/Message';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import SearchIcon from '@mui/icons-material/Search';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PendingIcon from '@mui/icons-material/Pending';
 import { Box, Button } from "@mui/material";
@@ -52,6 +53,11 @@ const NAVIGATION = [
     segment: 'dashboard/pendingapproval',
     title: 'Pending Approval',
     icon: <PendingIcon />,
+  },
+  {
+    segment: 'dashboard/approvedproperties',
+    title: 'Approved',
+    icon: <ThumbUpAltIcon />,
   },
 ];
 

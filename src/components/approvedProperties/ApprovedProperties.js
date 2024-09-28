@@ -1,24 +1,24 @@
 import { Typography } from "@mui/material"
-import styles from "./pendingApproval.module.scss"
+import styles from "./approvedProperties.module.scss"
 import { useEffect, useState } from "react";
 import { collection, doc, getDocs } from "firebase/firestore";
-import { db } from "../../api/firebase-config";
+import { db } from "../../api/firebase-config.js";
 import { useSelector } from "react-redux";
-import {PendingApprovalforRenter} from "./PendingApprovalforRenter.js";
-import {PendingApprovalforHost} from "./PendingApprovalforHost.js";
-import {PendingApprovalMessages} from "./PendingApprovalMessages.js"
+import {ApprovedforRenter} from "./ApprovedforRenter.js";
+import {ApprovedforHost} from "./ApprovedforHost.js";
+import {ApprovedMessages} from "./ApprovedMessages.js"
 
 
 
-export const PendingApproval = () => {
-const [pendingPropertiesData,setpendingPropertiesData] = useState([])
+export const ApprovedProperties = () => {
+const [approvedPropertiesData,setApprovedPropertiesData] = useState([])
 const { user } = useSelector((state) => state.auth);
 const [loading, setLoading] = useState(true)
 const {isHostChecked, isRenterChecked} = useSelector(state =>state.auth.user)
 
-const filterPendingPorpertiesData = pendingPropertiesData.filter((property) => property.pendingApprovals[0]?.requestingUser === user.email)
+const filterApprovedPropertiesData = approvedPropertiesData.filter((property) => property.approved[0]?.requestingUser === user.email)
 
-//retrieves the data for from PendingApproval collection for Tentants/Renter
+//retrieves the data for from Approved collection for Tentants/Renter
 useEffect(() => {
     const fetchData = async () => {
         try {
@@ -33,21 +33,21 @@ useEffect(() => {
                     await Promise.all(
                         checkProperties.docs.map(async (property) => { //getting me docs from properties
                             const propertyRef = doc(db, "users", user.id, "properties", property.id);
-                            const pendingApprovalRef = collection(propertyRef, "PendingApproval");
-                            const pendingSnapshot = await getDocs(pendingApprovalRef); //retrieving data from PendingApproval
+                            const approvedRef = collection(propertyRef, "Approval");
+                            const pendingSnapshot = await getDocs(approvedRef); //retrieving data from Approved
 
                             // Only process if there are pending approvals
                             if (!pendingSnapshot.empty) {
-                                const pendingApprovals = pendingSnapshot.docs.map(doc => ({
+                                const approved = pendingSnapshot.docs.map(doc => ({
                                     id: doc.id,
-                                    ...doc.data(), // Include all data from the PendingApproval document
+                                    ...doc.data(), // Include all data from the Approved document
                                 }));
 
                                 locationArray.push({
                                     propertyId: property.id,
                                     propertyData: property.data(), // Include the property data since it is in the loop
                                     userId: user.id,
-                                    pendingApprovals, // Add the pending approvals
+                                    approved, // Add the pending approvals
                                 });
                             }
                         })
@@ -55,7 +55,7 @@ useEffect(() => {
                 })
             );
 
-            setpendingPropertiesData(locationArray);
+            setApprovedPropertiesData(locationArray);
             setLoading(false)
         } catch (error) {
             console.error("Error Retrieving Data", error);
@@ -67,7 +67,7 @@ useEffect(() => {
 
 
 
-    // console.log("Properties: ",filterPendingPorpertiesData)
+    //  console.log("Properties: ",filterApprovedPropertiesData)
     // console.log("isHostChecked: ",isHostChecked, "isRenterChecked: ",isRenterChecked )
 
     return (
@@ -77,15 +77,15 @@ useEffect(() => {
             <>
             {isHostChecked ? (
             <>
-            <PendingApprovalMessages/>
+            <ApprovedMessages/>
 
-                <PendingApprovalforHost filterPendingPorpertiesData={filterPendingPorpertiesData}/>
+                <ApprovedforHost filterApprovedPropertiesData={filterApprovedPropertiesData}/>
                 <br/>
-                <PendingApprovalforRenter filterPendingPorpertiesData={filterPendingPorpertiesData}/>
+                <ApprovedforRenter filterApprovedPropertiesData={filterApprovedPropertiesData}/>
            </>
             ) : isRenterChecked ? (
                 /* For tentant/renters */
-                <PendingApprovalforRenter filterPendingPorpertiesData={filterPendingPorpertiesData}/>
+                <ApprovedforRenter filterApprovedPropertiesData={filterApprovedPropertiesData}/>
             ) :null}
             </>
         ) : (

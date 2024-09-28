@@ -9,6 +9,8 @@ import { Box, Button, Typography } from '@mui/material';
 import { AdvertiseProperty } from '../advertiseProperty/AdevertiseProperty.js';
 import { Message } from '../message/Message.js';
 import { PendingApproval } from '../pendingApproval/PendingApproval.js';
+import { ApprovedProperties } from '../approvedProperties/ApprovedProperties.js';
+
 
 export const DashboardRoute = () => {
     const { user } = useSelector((state) => state.auth);
@@ -28,6 +30,7 @@ export const DashboardRoute = () => {
                 <Route path="advertiseproperty" element={<AdvertiseProperty />} />
                 <Route path="message" element={<Message />} />
                 <Route path="pendingapproval" element={<PendingApproval />} />
+                <Route path="approvedproperties" element={<ApprovedProperties />} />
                 <Route path="*" element={<Typography>Page not found</Typography>} />
             </Route>
         </Routes>
