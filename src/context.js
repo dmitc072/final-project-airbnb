@@ -3,6 +3,7 @@ export const AppContext = createContext({});
 
 const AppContextProvider = (props) => {
 
+  const [changeWarning, setChangeWarning] = useState(false);
 
 
     const row = {
@@ -27,7 +28,9 @@ const AppContextProvider = (props) => {
         row,
         column,
         pendingApprovalMessage, 
-        setPendingApprovalMessage
+        setPendingApprovalMessage,
+        changeWarning, 
+        setChangeWarning
     };
 
 return (

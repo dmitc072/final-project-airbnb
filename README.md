@@ -11,7 +11,9 @@ Install " npm install @toolpad/core " for the Navbar
 8. Create Pending Approval
 9.Send an alert to host that he has approvals
 10.Update Redux to signout to set the value of pendinApprovalMessage back to its initial value
-
+11. update PendingApprovalHost.js, to approve or dissaprove request
+12. Needed to add price change so I created a new value in firebase under the property in Properties.js
+13. Create a notice to inform guest of change of price and added a boolean in redux to trigger it once on log in
 
 Requesting to rent:
 search for property,

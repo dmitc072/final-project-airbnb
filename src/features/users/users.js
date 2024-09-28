@@ -38,7 +38,8 @@ export const signinUser = createAsyncThunk(
         isProfileComplete: userInfo.isProfileComplete || false,
         isFirstLogin: userInfo.isFirstLogin,
         hostIsVerified:userInfo.hostIsVerified || false,
-        pendingApprovalMessage:userInfo.pendingApprovalMessage || false //true didn't work, so I used false
+        pendingApprovalMessage:userInfo.pendingApprovalMessage || false, //true didn't work, so I used false
+        priceChange:userInfo.pendingApprovalMessage || false
       };
 
       return { data: serializedUser, status: 200 };
@@ -99,6 +100,9 @@ const userSlice = createSlice({
     setPendingApprovalMessage: (state, action) => {
       if (state.user) state.user.pendingApprovalMessage = action.payload;
     },
+    setPriceChange: (state, action) => {
+      if (state.user) state.user.priceChange = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -158,8 +162,8 @@ export const initializeAuth = () => async (dispatch) => {
             isProfileComplete: userInfo.isProfileComplete || false,
             isFirstLogin: userInfo.isFirstLogin ,
             hostIsVerified:userInfo.hostIsVerified || false,
-            pendingApprovalMessage:userInfo.pendingApprovalMessage || false
-
+            pendingApprovalMessage:userInfo.pendingApprovalMessage || false,
+            priceChange:userInfo.priceChange || false
           };
 
           dispatch(setUser(serializedUser));
@@ -181,7 +185,8 @@ export const {
   setPhotoURL,
   setUser,
   setHostIsVerified,
-  setPendingApprovalMessage
+  setPendingApprovalMessage,
+  setPriceChange
 
 } = userSlice.actions;
 

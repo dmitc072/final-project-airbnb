@@ -9,7 +9,7 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../api/firebase-config';
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { AppContext } from '../../context';
 import { useSelector } from 'react-redux';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -58,7 +58,16 @@ export const Properties = () => {
 
             if (editMode && selectedProperty) { 
                 const propertyDocRef = doc(userDocRef, "properties", selectedProperty.propertyName);
-                await setDoc(propertyDocRef, { ...data, imageUrls }, { merge: true });
+                const originalDocSnapshot = await getDoc(propertyDocRef)
+                const originalData = originalDocSnapshot.data()
+                const originalPrice = originalData.pricePerNight
+                console.log("original price per night:", originalPrice)
+                await setDoc(propertyDocRef, { ...data,
+                    originalPrice:originalPrice,
+                    imageUrls 
+                }, { merge: true });
+
+
             } else {
                 const propertyDocRef = doc(userDocRef, "properties", data.propertyName);
                 await setDoc(propertyDocRef, { ...data, imageUrls });

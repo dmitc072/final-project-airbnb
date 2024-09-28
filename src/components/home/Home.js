@@ -7,7 +7,7 @@ import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import { db } from '../../api/firebase-config.js';
 import {setPendingApprovalMessage} from "../../features/users/users.js"
 import { PendingApprovalMessages } from '../pendingApproval/PendingApprovalMessages.js';
-
+import {ChangeOfPrice} from '../changeOfPrice/ChangeOfPrice.js'
 
 export const Home = () => {
     const [searchResult, setSearchResult] = useState([]);
@@ -85,8 +85,9 @@ export const Home = () => {
     // }, [db, user.email]);
     
     return (
-        <>
+        <>   
             <PendingApprovalMessages/> {/*send a message out for host if there is a pending request and redirects to pernding page*/}
+            <ChangeOfPrice/>
             <SearchBar setSearchResult={setSearchResult} /> {/* Passing setSearchResult as a parameter */}
             <SearchResults searchResult={searchResult} />
             
