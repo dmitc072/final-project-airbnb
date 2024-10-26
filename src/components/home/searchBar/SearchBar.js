@@ -32,7 +32,7 @@ export const SearchBar = ({ setSearchResult }) => {
           locationSnapshot.forEach(locationDoc => {
             locationsArray.push({...locationDoc.data(),user:userDoc.id}); // Push data into the temporary array and retrieve the user
           });
-          //console.log(locationsArray)
+          console.log(locationsArray)
         }
       });
   
@@ -48,16 +48,18 @@ export const SearchBar = ({ setSearchResult }) => {
   };
 
   const handleSearch = () => {
+    const normalizedSearch = search.trim().toLowerCase(); // Trim and lowercase search term
+  
     const results = location.filter(result => 
-      result.state === search || 
-      result.city === search || 
-      result.zipCode === search
+      result.state?.toLowerCase() === normalizedSearch || 
+      result.city?.toLowerCase() === normalizedSearch || 
+      result.zipCode?.toLowerCase() === normalizedSearch
     );
-
+  
     setSearchResult(results);
-    console.log('Search Results:', results);
+    console.log('Search Results:', results, location, search);
   };
-
+  
   return (
     <>
       <Box sx={column}>

@@ -15,7 +15,7 @@ Install " npm install @toolpad/core " for the Navbar
 12. Needed to add price change so I created a new value in firebase under the property in Properties.js
 13. Create a notice to inform guest of change of price and added a boolean in redux to trigger it once on log in
 14. created a folder called function to convert the dates
-15. Created a Modal which the component is called RatingModal.js which is connected to ApprovedforRenter, to send a review
+15. Created a Modal which the component is called RatingModal.js which is connected to ApprovedforRenter, to
 Requesting to rent:
 search for property,
 click you would like to rent after submitting a date.

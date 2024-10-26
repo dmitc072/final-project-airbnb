@@ -23,7 +23,7 @@ export const ApprovedforHost = () => {
                     // Map through each property, fetching its ApprovedApproval documents
                     const propertyMap = await Promise.all(
                         propertySnapshot.docs.map(async (property) => {
-                            const propertyData = await getDocs(collection(db, "users", user.email, "properties", property.id, "ApprovedApproval"));
+                            const propertyData = await getDocs(collection(db, "users", user.email, "properties", property.id, "Approval"));
     
                             if (!propertyData.empty) {
                                 const availability = propertyData.docs.map((available) => {
@@ -43,7 +43,7 @@ export const ApprovedforHost = () => {
                             
                         })
                     );
-    
+                    console.log(propertyMap)
                     setApprovedProperties(propertyMap);
                 } else {
                     console.log("No properties found for approval.");
@@ -56,67 +56,13 @@ export const ApprovedforHost = () => {
         fetchPropertiesForApproval();
     }, [user.email]);
     
-    const deleteRequest = async (approvedProperty, approvedRequestID) => {
-        console.log("approvedProperty:",approvedProperty, "approvedRequest", approvedRequestID)
-        try {
-            const docRef = doc(db, "users", user.email, "properties", approvedProperty.id, "ApprovedApproval", approvedRequestID);
-            
-            // Delete the document
-            await deleteDoc(docRef);
-            console.log("Deleted requested");
-    
-            setApprovedProperties((prev) => //prev: Refers to the current state of approvedProperties
-                prev.map((property) => {
-                    console.log("property", property);
-                    
-                    // Check if property and approvedProperty exist and have an id
-                    if (property?.id && approvedProperty?.id && property.id === approvedProperty.id) {
-                        return {
-                            ...property,
-                            availability: property.availability?.filter(req => req.id !== approvedRequestID) || []
-                        };
-                    }
-                    
-                    return property;
-                })
-            );
-            
-        } catch (error) {
-            console.error("Error in deleting request: ", error);
-        }
-    };
+
     
     
 
-    const approveRequest = async (approvedProperty, approvedRequestID) => {
-        const querySnapshot = doc(db,"users",user.email,"properties",approvedProperty.id,"ApprovedApproval",approvedRequestID)
-        const copyData = await getDoc(querySnapshot)
-        //console.log("copied data: ",copyData.data())
-        const approvalDoc = doc(db,"users",user.email,"properties",approvedProperty.id,"Approval",approvedRequestID)
-        const changeToApproval = await setDoc(approvalDoc,
-            copyData.data(),
-            {merge:true}
-        )
-        
-        const deleteApproved = await deleteDoc(querySnapshot)
-        console.log("Deleted requested");
-
-        setApprovedProperties((prev) => //prev: Refers to the current state of approvedProperties
-                prev.map((property) => {
-                    console.log("property", property);
-                    
-                    // Check if property and property.id and approvedProperty exist and have an id
-                    if (property?.id && approvedProperty?.id && property.id === approvedProperty.id) {
-                        return {
-                            ...property,
-                            availability: property.availability?.filter(req => req.id !== approvedRequestID) 
-                        };
-                    }
-                    
-                    return property;
-                })
-            );
-        
+    const reviewMessage = async (approvedProperty, reviewMessage) => {
+        console.log(reviewMessage)
+        alert(reviewMessage)
     }
 
     //console.log(filterApprovedProperties)
@@ -128,7 +74,7 @@ export const ApprovedforHost = () => {
                 <div key={index} className={styles.approvedProperties}>
                      <div>
                         <Typography>Property Name:</Typography>
-                        <div className={styles.data}>{approvedProperty.propertyName}</div>
+                        <div className={styles.data}>{approvedProperty.id}</div>
                     </div>
                     <div>
                         
@@ -139,11 +85,13 @@ export const ApprovedforHost = () => {
                                     <div >{approved.fromDate}</div>
                                     <Typography>To:</Typography>
                                     <div >{approved.toDate}</div>
+                                    {console.log(approved.reviewMessage)}
+                                    
+                                    <div className={styles.button}>
+                                        <Button disabled={!approved.reviewMessage} onClick={()=>reviewMessage(approvedProperty, approved.reviewMessage)}>{(approved.reviewMessage) ? "See Review": "No Review"}</Button>
+                                    </div>
                                 </div>
-                                <div className={styles.button}>
-                                    <Button onClick={()=>approveRequest(approvedProperty, approved.id)}>Approve</Button>
-                                    <Button onClick={() => deleteRequest(approvedProperty, approved.id)}>Disapprove</Button>
-                                </div>
+
                             </div>
                         ))}
                         
