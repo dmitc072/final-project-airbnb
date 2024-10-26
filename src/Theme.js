@@ -90,6 +90,26 @@ export const theme = createTheme({
                 },
             },
         },
+        //Navbar 
+        MuiPaper:{
+            styleOverrides: {
+                root: {
+                    background:'aliceblue',
+                    "&:MuiListSubHeader":{
+                        background:'aliceblue',
+
+                    }
+                }
+            }
+        },
+        //Navbar title: Main Items
+        MuiListSubheader:{
+            styleOverrides: {
+                root: {
+                    background:'aliceblue',
+                }
+            }
+        },
         MuiTextField: {
             styleOverrides: {
                 root: {
