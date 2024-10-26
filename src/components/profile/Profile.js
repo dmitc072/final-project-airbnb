@@ -217,7 +217,7 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
         handleClose()
     }
 
-console.log("photo is", photoURL)
+//console.log("photo is", photoURL)
     return (
         <>
             <Modal
@@ -276,6 +276,7 @@ console.log("photo is", photoURL)
                     width="100%"
                     maxWidth="600px"
                     bgcolor="#f5f5f5"
+                    color="black"
                     padding="20px"
                     borderRadius="8px"
                     boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
@@ -343,7 +344,7 @@ console.log("photo is", photoURL)
                                                 className: styles.formcontrol,
                                             }}
                                             containerStyle={{ width: '100%' }}
-                                            inputStyle={{ height: '45px' }}
+                                            inputStyle={{ height: '45px', background:"white", color:"black" }}
                                         />
                                        
                                     </>

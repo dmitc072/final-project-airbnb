@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
-export const theme = createTheme({
+export const theme = (mode) => createTheme({
     palette: {
         primary: {
           main: '#1976d2', // Ensure 'main' is defined
@@ -94,11 +94,7 @@ export const theme = createTheme({
         MuiPaper:{
             styleOverrides: {
                 root: {
-                    background:'aliceblue',
-                    "&:MuiListSubHeader":{
-                        background:'aliceblue',
-
-                    }
+                    background: mode === 'dark' ? 'black': "aliceblue",
                 }
             }
         },
@@ -106,7 +102,7 @@ export const theme = createTheme({
         MuiListSubheader:{
             styleOverrides: {
                 root: {
-                    background:'aliceblue',
+                    background: mode === 'dark' ? 'black': "aliceblue",
                 }
             }
         },

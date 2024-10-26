@@ -115,6 +115,7 @@ export const AdvertiseProperty = () => {
                 height= "fit-content"
                 maxWidth="600px"
                 bgcolor="#f5f5f5"
+                color="black"
                 padding="20px"
                 borderRadius="8px"
                 boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"

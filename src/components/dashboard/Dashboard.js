@@ -16,6 +16,8 @@ import PendingIcon from '@mui/icons-material/Pending';
 import { Box, Button } from "@mui/material";
 import { Home } from '../home/Home.js';
 import { ThemeProvider } from '@mui/material/styles'
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 
 const NAVIGATION = [
@@ -70,6 +72,32 @@ export const Dashboard = () => {
 
 
 
+  const [colorScheme, setColorScheme] = useState('light');
+
+  //this useEffect changes the DOM
+  useEffect(() => {
+    // Function to update color scheme
+    const updateColorScheme = () => {
+      const scheme = document.documentElement.getAttribute('data-toolpad-color-scheme');
+      setColorScheme(scheme);
+    };
+
+    // Initial update
+    updateColorScheme();
+
+    // Set up a MutationObserver to listen for changes
+    const observer = new MutationObserver(() => {
+      updateColorScheme();
+    });
+
+    // Observe changes to the attributes of the documentElement
+    observer.observe(document.documentElement, {
+      attributes: true, // Watch for attribute changes
+    });
+
+    // Clean up the observer on component unmount
+    return () => observer.disconnect();
+  }, []);
 
 
   const handleSignOut = async () => {
@@ -92,8 +120,8 @@ export const Dashboard = () => {
       }))
   }
 >
-  <ThemeProvider theme={theme}>
-    <DashboardLayout>
+  <ThemeProvider theme={theme(colorScheme)}>
+  <DashboardLayout>
       <Box
         sx={{
           display: 'flex',
