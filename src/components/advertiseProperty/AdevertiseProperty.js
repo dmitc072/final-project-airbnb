@@ -6,9 +6,11 @@ import {
     Typography,
     InputAdornment,
     FormControl,
-    Select
+    Select,
+    Autocomplete,
+    MenuItem
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../api/firebase-config'; // Adjust the import based on your actual file structure
 import { doc, setDoc } from "firebase/firestore";
@@ -23,17 +25,18 @@ import axios from 'axios';
 
 export const AdvertiseProperty = () => {
     const navigate = useNavigate();
-    const { column } = useContext(AppContext);
+    const { column,states } = useContext(AppContext);
     const [selectedImages, setSelectedImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
     const { user } = useSelector((state) => state.auth);
     const [latitude, setLatitude] = useState(null);
     const [longitude, setLongitude] = useState(null)
-    
+    const [imageUploaded, setImageUploaded] = useState(true)
     const {
         register,
         handleSubmit,
         watch,
+        control,
         formState: { errors, isSubmitted },
     } = useForm({
         defaultValues: {
@@ -62,11 +65,19 @@ export const AdvertiseProperty = () => {
 
     const onSubmit = async (data) => {
         try {
+            console.log("image",imageUploaded)
+            if(!imageUploaded){
+                return  alert("Waiting to upload Image!")
+            }
             const userDocRef = doc(db, "users", user.email);
             const propertyDocRef = doc(userDocRef, "properties", data.propertyName);
-            
             // Save image URLs along with property data
-            await setDoc(propertyDocRef, { ...data, imageUrls });
+            await setDoc(propertyDocRef, { 
+                ...data,
+                latitude:latitude,
+                longitude:longitude,
+                imageUrls });
+            alert("Property Saved!")
             navigate("/dashboard");
         } catch (error) {
             console.error("Error saving property:", error.message);
@@ -75,6 +86,7 @@ export const AdvertiseProperty = () => {
     };
 
     const handleImageUpload = async (event) => {
+        setImageUploaded(false)
         const files = Array.from(event.target.files);
         const urls = [];
         const imagePreviews = [];
@@ -100,6 +112,8 @@ export const AdvertiseProperty = () => {
         // Update state with image URLs and previews
         setImageUrls(urls);
         setSelectedImages(prev => [...prev, ...imagePreviews]);
+        setImageUploaded(true)
+
     };
 
     useEffect(() => {
@@ -128,7 +142,7 @@ export const AdvertiseProperty = () => {
         };
 
         console.log(data)
-        const priceCalculator = await axios.post("http://3.82.58.179/:5000/predict",data)
+        const priceCalculator = await axios.post("http://ec2-54-224-46-135.compute-1.amazonaws.com:5000/predict",data)
         console.log("price Calculator:", priceCalculator.data)
         } catch (error) {
             console.error("Can not reach server!")
@@ -236,19 +250,39 @@ export const AdvertiseProperty = () => {
                     
                     {/* State Field */}
                     <Box width="100%" marginBottom="16px">
-                        <Typography variant="subtitle1" gutterBottom>
-                            State
-                        </Typography>
-                        <TextField 
-                            {...register("state", {
-                                required: "State is required",
-                            })}
-                            placeholder="Enter state"
-                            error={isSubmitted && !!errors.state}
-                            helperText={isSubmitted && errors.state?.message}
-                            fullWidth
-                        />
-                    </Box>
+                    <Typography variant="subtitle1" gutterBottom>
+                        State
+                    </Typography>
+                    <Controller
+                        name="state"
+                        control={control}
+                        required
+                        render={({ field }) => (
+                            <Autocomplete
+                                {...field}
+                                options={states.map((state) => state.name)} // State names directly as options
+                                onChange={(_, selectedOption) => {
+                                    field.onChange(selectedOption); // Pass the selected state name
+                                }}
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "& fieldset": { height: "50px" }, // Remove the border
+                                            },
+                                        }}
+                         
+                                        error={isSubmitted && !!errors.state}
+                                        helperText={isSubmitted && errors.state?.message}
+                                    />
+                                )}
+                                fullWidth
+                            />
+                        )}
+                    />
+                </Box>
+
                     
                     {/* Zip Code Field */}
                     <Box width="100%" marginBottom="16px">
@@ -294,20 +328,26 @@ export const AdvertiseProperty = () => {
                     {/* Room Type */}
                     <Box width="100%" marginBottom="16px">
                         <Typography variant="subtitle1" gutterBottom>
-                           Type of Room
+                        Type of Room
                         </Typography>
-                        <FormControl fullWidth >
-                        <Select
-                            {...register("roomType", { required: "Room type is required" })} // Register the select input
-                            inputProps={{ name: 'roomType' }}
-                            sx={{ width: "300px", height: "43px", background: "white", marginLeft: "10px", border: ".2px black solid" }}
-                        >
-                            <option value="Entire home/apt">Entire home/apt</option>
-                            <option value="Private room">Private room</option>
-                        </Select>
-
+                        <FormControl fullWidth>
+                            <Select
+                                {...register("roomType", { required: "Room type is required" })} // Register the select input
+                                inputProps={{ name: 'roomType' }}
+                                sx={{
+                                    width: "300px",
+                                    height: "43px",
+                                    background: "white",
+                                    marginLeft: "10px",
+                                    border: ".2px black solid"
+                                }}
+                            >
+                                <MenuItem value="Entire home/apt">Entire home/apt</MenuItem>
+                                <MenuItem value="Private room">Private room</MenuItem>
+                            </Select>
                         </FormControl>
                     </Box>
+
                     
                     {/* Price per Night Field */}
                     <Box width="100%" marginBottom="16px">

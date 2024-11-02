@@ -6,7 +6,7 @@ import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mu
 import { useSelector } from "react-redux";
 
 export const SearchBar = ({ setSearchResult }) => {
-  const { row, column } = useContext(AppContext);
+  const { row, column, states } = useContext(AppContext);
   const [location, setLocation] = useState([]);
   const [search, setSearch] = useState('');
   const theme = useTheme();
@@ -32,7 +32,7 @@ export const SearchBar = ({ setSearchResult }) => {
           locationSnapshot.forEach(locationDoc => {
             locationsArray.push({...locationDoc.data(),user:userDoc.id}); // Push data into the temporary array and retrieve the user
           });
-          console.log(locationsArray)
+          console.log("location array ",locationsArray)
         }
       });
   
@@ -48,17 +48,24 @@ export const SearchBar = ({ setSearchResult }) => {
   };
 
   const handleSearch = () => {
-    const normalizedSearch = search.trim().toLowerCase(); // Trim and lowercase search term
-  
+    let normalizedSearch = search.trim().toLowerCase(); // Trim and lowercase search term
+
+    // Find and convert full state name to abbreviation if it exists
+    const stateMatch = states.find(state => state.abbreviation.toLowerCase() === normalizedSearch);
+    if (stateMatch) {
+      normalizedSearch = stateMatch.name.toLowerCase();
+    }
+    
+    // Filter based on the updated normalized search term
     const results = location.filter(result => 
       result.state?.toLowerCase() === normalizedSearch || 
       result.city?.toLowerCase() === normalizedSearch || 
       result.zipCode?.toLowerCase() === normalizedSearch
     );
-  
+    
     setSearchResult(results);
     console.log('Search Results:', results, location, search);
-  };
+  }    
   
   return (
     <>

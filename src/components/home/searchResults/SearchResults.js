@@ -58,7 +58,7 @@ export const SearchResults = ({ searchResult }) => {
 
   const checkAvailablity = (result) => {
     setPropertyData(result);
-    setOpenRentModal(true)
+    setOpenRentModal(true)//allows availabilityModel.js to open
     
   
   }
@@ -107,17 +107,28 @@ export const SearchResults = ({ searchResult }) => {
                   <Typography variant="body2" color="textSecondary">No Images Available</Typography>
               </Box>
               )}
-
-            <Typography variant="h6">State:</Typography>
-            <Typography>{result.state}</Typography>
-            <Typography variant="h6">City:</Typography>
-            <Typography>{result.city}</Typography>
-            <Typography variant="h6">Zip Code:</Typography>
-            <Typography>{result.zipCode}</Typography>
-            <Typography variant="h6"># of Rooms:</Typography>
-            <Typography>{result.rooms}</Typography>
+            <div className={styles.row}>
+              <div>
+                <Typography variant="h6">State:</Typography>
+                <Typography>{result.state}</Typography>
+              </div>
+              <div>
+                <Typography variant="h6">City:</Typography>
+                <Typography>{result.city}</Typography>
+              </div>
+            </div>
+            <div className={styles.row}>
+              <div>
+                <Typography variant="h6">Zip Code:</Typography>
+                <Typography>{result.zipCode}</Typography>
+              </div>
+              <div>
+                <Typography variant="h6"># of Rooms:</Typography>
+                <Typography>{result.rooms}</Typography>
+              </div>
+            </div>
             <Typography variant="h6">Price per Night:</Typography>
-            <Typography>{result.pricePerNight}</Typography>
+            <Typography>{`$${result.pricePerNight}`}</Typography>
             <Button onClick={() => checkAvailablity(result)}>Rent Location</Button>
             </Box>
         ))}
