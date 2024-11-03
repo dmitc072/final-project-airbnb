@@ -83,17 +83,4 @@
     flex-direction: column;
 }
 
-.slickPrev, .slickNext {
-    background:black;
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 50%; /* Round buttons */
-    width: 30px; /* Adjust size */
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-.slickPrev:before, .slickNext:before {
-    background-color: black; /* Arrow color */
-}

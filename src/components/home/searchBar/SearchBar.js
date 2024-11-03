@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../api/firebase-config.js";
 import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Filter } from "../searchResults/Filter.js";
 
 export const SearchBar = ({ setSearchResult }) => {
   const { row, column, states } = useContext(AppContext);
@@ -12,8 +13,9 @@ export const SearchBar = ({ setSearchResult }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); 
   const { isHostChecked } = useSelector((state) => state.auth.user)
+  const [open,setOpen] = useState(false)
 
-
+ 
   // Fetches all locations
   useEffect(() => {
     const fetchLocations = async () => {
@@ -86,6 +88,10 @@ export const SearchBar = ({ setSearchResult }) => {
           <Button onClick={handleSearch}>
             Search
           </Button>
+          <Button onClick={() => setOpen(true)}>
+            Filter
+          </Button>
+          <Filter open={open} setOpen={setOpen}/>
         </Box>
       </Box>
     </>
