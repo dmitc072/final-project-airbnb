@@ -3,7 +3,7 @@
     border-radius: 20px;
     padding: 22px;
     height:auto;
-    width: 600px;
+    width: 350px;
     box-shadow: 1;
     display: flex;
     flex-direction: column;
@@ -18,16 +18,16 @@
 .mainImage{
     max-width: 244px;
     width:100%;
-    height: 300px;
+    height: 150px;
     background-size: cover;
     background-position: center;
-    border-radius: 1px;
+    border-radius: 10px;
     margin-bottom: 10px;
 }
 
 .otherImages{
-    width:100px;
-    height: 100px;
+    width:50px;
+    height: 50px;
     background-size: cover;
     background-position: center;
     border-radius: 1px;
@@ -37,6 +37,7 @@
 .noImage{
     width: 100%;
     height: 150px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -70,3 +71,16 @@
     display: flex;
     justify-content: center;
 }
+
+.row{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
+
+.column{
+    display:flex;
+    flex-direction: column;
+}
+
+

@@ -1,23 +1,14 @@
 import { createTheme } from "@mui/material/styles";
 
-export const theme = createTheme({
+export const theme = (mode) => createTheme({
     palette: {
         primary: {
-            main: "#f8f8f8",
+          main: '#1976d2', // Ensure 'main' is defined
         },
         secondary: {
-            main: "#fff",
+          main: '#dc004e', // Ensure 'main' is defined
         },
-        error: {
-            main: "#f5c2c7",
-        },
-        success: {
-            main: "#83a929",
-        },
-        buttonBackground: {
-            main: "#83A929",
-        },
-    },
+      },
     typography: {
         h1: {
             fontWeight: 400,
@@ -98,6 +89,22 @@ export const theme = createTheme({
                     }
                 },
             },
+        },
+        //Navbar 
+        MuiPaper:{
+            styleOverrides: {
+                root: {
+                    background: mode === 'dark' ? 'black': "aliceblue",
+                }
+            }
+        },
+        //Navbar title: Main Items
+        MuiListSubheader:{
+            styleOverrides: {
+                root: {
+                    background: mode === 'dark' ? 'black': "aliceblue",
+                }
+            }
         },
         MuiTextField: {
             styleOverrides: {

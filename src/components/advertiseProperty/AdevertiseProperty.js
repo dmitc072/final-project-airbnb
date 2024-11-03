@@ -5,9 +5,12 @@ import {
     TextField,
     Typography,
     InputAdornment,
-    FormControl
+    FormControl,
+    Select,
+    Autocomplete,
+    MenuItem
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../api/firebase-config'; // Adjust the import based on your actual file structure
 import { doc, setDoc } from "firebase/firestore";
@@ -18,17 +21,22 @@ import { v4 as uuidv4 } from 'uuid'; // Import uuidv4 for unique file naming
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../../api/firebase-config'; // Adjust the import based on your actual file structure
 import styles from './advertiseProperty.module.scss'
+import axios from 'axios';
 
 export const AdvertiseProperty = () => {
     const navigate = useNavigate();
-    const { column } = useContext(AppContext);
+    const { column,states } = useContext(AppContext);
     const [selectedImages, setSelectedImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
     const { user } = useSelector((state) => state.auth);
-
+    const [latitude, setLatitude] = useState(null);
+    const [longitude, setLongitude] = useState(null)
+    const [imageUploaded, setImageUploaded] = useState(true)
     const {
         register,
         handleSubmit,
+        watch,
+        control,
         formState: { errors, isSubmitted },
     } = useForm({
         defaultValues: {
@@ -41,17 +49,35 @@ export const AdvertiseProperty = () => {
             description: "",
             contactEmail: "",
             images: [], // Handle multiple images
-            available:true //sets the house to avilable
+            available:true, //sets the house to avilable
+            roomType:"",
+            latitude: latitude,
+            longitude: longitude
         }
     });
 
+    const addressValue = watch('address')
+    const cityValue = watch('city')
+    const stateValue = watch('state')
+    const latitudeValue = watch('latitude');
+    const longitudeValue = watch('longitude');
+    const roomTypeValue = watch('roomType');
+
     const onSubmit = async (data) => {
         try {
+            console.log("image",imageUploaded)
+            if(!imageUploaded){
+                return  alert("Waiting to upload Image!")
+            }
             const userDocRef = doc(db, "users", user.email);
             const propertyDocRef = doc(userDocRef, "properties", data.propertyName);
-            
             // Save image URLs along with property data
-            await setDoc(propertyDocRef, { ...data, imageUrls });
+            await setDoc(propertyDocRef, { 
+                ...data,
+                latitude:latitude,
+                longitude:longitude,
+                imageUrls });
+            alert("Property Saved!")
             navigate("/dashboard");
         } catch (error) {
             console.error("Error saving property:", error.message);
@@ -60,6 +86,7 @@ export const AdvertiseProperty = () => {
     };
 
     const handleImageUpload = async (event) => {
+        setImageUploaded(false)
         const files = Array.from(event.target.files);
         const urls = [];
         const imagePreviews = [];
@@ -85,6 +112,8 @@ export const AdvertiseProperty = () => {
         // Update state with image URLs and previews
         setImageUrls(urls);
         setSelectedImages(prev => [...prev, ...imagePreviews]);
+        setImageUploaded(true)
+
     };
 
     useEffect(() => {
@@ -94,6 +123,52 @@ export const AdvertiseProperty = () => {
         };
     }, [selectedImages]);
 
+    const priceCalculator = async () => {
+        try {
+        const data = {
+            latitude: latitude,
+            longitude: longitude,
+            minimum_nights: 1,
+            room_type: roomTypeValue, // Adding roomType here
+            price:129,
+            neighbourhood_group:cityValue,
+            neighbourhood:cityValue,
+            number_of_reviews:1,
+            last_review:"10/11/2022",
+            calculated_host_listings_count:2,
+            availability_365:365,
+            reviews_per_month:1
+            
+        };
+
+        console.log(data)
+        const priceCalculator = await axios.post("http://ec2-54-224-46-135.compute-1.amazonaws.com:5000/predict",data)
+        console.log("price Calculator:", priceCalculator.data)
+        } catch (error) {
+            console.error("Can not reach server!")
+        }
+    }
+
+    useEffect(() => {
+        const location = async () => {
+            const token = "AIzaSyAqOK9SIpnzoE5Sf_qwcQQwejGybGyilUo";
+            try {
+                const fetchData = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addressValue},${cityValue},${stateValue}&key=${token}`);
+                console.log("data", fetchData.data);
+                const data = fetchData.data
+                const location = data.results[0].geometry.location 
+                setLatitude(location.lat);
+                setLongitude(location.lng)
+                console.log("log",location)
+
+            } catch (error) {
+                console.error("Error fetching data:", error.response ? error.response.data : error.message);
+            }
+        };
+        location();
+    }, [addressValue, cityValue, stateValue]);
+    
+    
     return (
 
         <Box
@@ -115,6 +190,7 @@ export const AdvertiseProperty = () => {
                 height= "fit-content"
                 maxWidth="600px"
                 bgcolor="#f5f5f5"
+                color="black"
                 padding="20px"
                 borderRadius="8px"
                 boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
@@ -174,19 +250,39 @@ export const AdvertiseProperty = () => {
                     
                     {/* State Field */}
                     <Box width="100%" marginBottom="16px">
-                        <Typography variant="subtitle1" gutterBottom>
-                            State
-                        </Typography>
-                        <TextField 
-                            {...register("state", {
-                                required: "State is required",
-                            })}
-                            placeholder="Enter state"
-                            error={isSubmitted && !!errors.state}
-                            helperText={isSubmitted && errors.state?.message}
-                            fullWidth
-                        />
-                    </Box>
+                    <Typography variant="subtitle1" gutterBottom>
+                        State
+                    </Typography>
+                    <Controller
+                        name="state"
+                        control={control}
+                        required
+                        render={({ field }) => (
+                            <Autocomplete
+                                {...field}
+                                options={states.map((state) => state.name)} // State names directly as options
+                                onChange={(_, selectedOption) => {
+                                    field.onChange(selectedOption); // Pass the selected state name
+                                }}
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "& fieldset": { height: "50px" }, // Remove the border
+                                            },
+                                        }}
+                         
+                                        error={isSubmitted && !!errors.state}
+                                        helperText={isSubmitted && errors.state?.message}
+                                    />
+                                )}
+                                fullWidth
+                            />
+                        )}
+                    />
+                </Box>
+
                     
                     {/* Zip Code Field */}
                     <Box width="100%" marginBottom="16px">
@@ -203,29 +299,81 @@ export const AdvertiseProperty = () => {
                             fullWidth
                         />
                     </Box>
+
+                    {/* Latitude Field */}
+                    <Box width="100%" marginBottom="16px">
+                        <Typography variant="subtitle1" gutterBottom>
+                            Latitude
+                        </Typography>
+                        <TextField 
+                            {...register("latitude")}
+                            value={latitude}
+                            disabled
+                            fullWidth
+                        />
+                    </Box>
+                    {/* Longitude Field */}
+                    <Box width="100%" marginBottom="16px">
+                        <Typography variant="subtitle1" gutterBottom>
+                            Longitude
+                        </Typography>
+                        
+                        <TextField 
+                            {...register("longitude")}
+                            value={longitude}
+                            disabled
+                            fullWidth
+                        />
+                    </Box>
+                    {/* Room Type */}
+                    <Box width="100%" marginBottom="16px">
+                        <Typography variant="subtitle1" gutterBottom>
+                        Type of Room
+                        </Typography>
+                        <FormControl fullWidth>
+                            <Select
+                                {...register("roomType", { required: "Room type is required" })} // Register the select input
+                                inputProps={{ name: 'roomType' }}
+                                sx={{
+                                    width: "300px",
+                                    height: "43px",
+                                    background: "white",
+                                    marginLeft: "10px",
+                                    border: ".2px black solid"
+                                }}
+                            >
+                                <MenuItem value="Entire home/apt">Entire home/apt</MenuItem>
+                                <MenuItem value="Private room">Private room</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+
                     
                     {/* Price per Night Field */}
                     <Box width="100%" marginBottom="16px">
                         <Typography variant="subtitle1" gutterBottom>
                             Price per Night
                         </Typography>
-                        <TextField 
-                            {...register("pricePerNight", {
-                                required: "Price per Night is required",
-                                pattern: {
-                                    value: /^[\d]+(\.[\d]{1,2})?$/,
-                                    message: "Invalid price format"
-                                }
-                            })}
-                            placeholder="Enter price per night"
-                            type="number"
-                            InputProps={{
-                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                            }}
-                            error={isSubmitted && !!errors.pricePerNight}
-                            helperText={isSubmitted && errors.pricePerNight?.message}
-                            fullWidth
-                        />
+                        <div className={styles.price}>
+                            <TextField 
+                                {...register("pricePerNight", {
+                                    required: "Price per Night is required",
+                                    pattern: {
+                                        value: /^[\d]+(\.[\d]{1,2})?$/,
+                                        message: "Invalid price format"
+                                    }
+                                })}
+                                placeholder="Enter price per night"
+                                type="number"
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                }}
+                                error={isSubmitted && !!errors.pricePerNight}
+                                helperText={isSubmitted && errors.pricePerNight?.message}
+                                fullWidth
+                            />
+                            <Button sx={{width:"100px"}} onClick={()=>priceCalculator()}>Price Estimator</Button>
+                        </div>
                     </Box>
                     
                     {/* Contact Email Field */}

@@ -1,0 +1,17 @@
+.modal {
+    width: 700px;
+    height: 400px;
+    display: flex;
+    align-items: center; /* Vertically center content */
+    justify-content: center; /* Horizontally center content */
+    flex-direction: column;
+    margin: auto;
+    background-color: white;
+    position: absolute; 
+    top: 50%; /* Position it in the middle */
+    left: 50%; /* Position it in the middle */
+    transform: translate(-50%, -50%); /* Offset by half the modal's width and height */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 16px;
+}

@@ -14,6 +14,7 @@ import { getStorage, connectStorageEmulator } from 'firebase/storage';
 const firebaseConfig = {
   apiKey: "AIzaSyC2EUK7nKg49ctwFtdlDQnu7IEmKX7EpwM",
   authDomain: "airbnb-34423.firebaseapp.com",
+  databaseURL: "https://airbnb-34423-default-rtdb.firebaseio.com",
   projectId: "airbnb-34423",
   storageBucket: "airbnb-34423.appspot.com",
   messagingSenderId: "458262467779",

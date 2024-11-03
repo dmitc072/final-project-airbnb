@@ -4,16 +4,18 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../api/firebase-config.js";
 import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Filter } from "../searchResults/Filter.js";
 
 export const SearchBar = ({ setSearchResult }) => {
-  const { row, column } = useContext(AppContext);
+  const { row, column, states } = useContext(AppContext);
   const [location, setLocation] = useState([]);
   const [search, setSearch] = useState('');
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); 
   const { isHostChecked } = useSelector((state) => state.auth.user)
+  const [open,setOpen] = useState(false)
 
-
+ 
   // Fetches all locations
   useEffect(() => {
     const fetchLocations = async () => {
@@ -32,7 +34,7 @@ export const SearchBar = ({ setSearchResult }) => {
           locationSnapshot.forEach(locationDoc => {
             locationsArray.push({...locationDoc.data(),user:userDoc.id}); // Push data into the temporary array and retrieve the user
           });
-          //console.log(locationsArray)
+          console.log("location array ",locationsArray)
         }
       });
   
@@ -48,16 +50,25 @@ export const SearchBar = ({ setSearchResult }) => {
   };
 
   const handleSearch = () => {
+    let normalizedSearch = search.trim().toLowerCase(); // Trim and lowercase search term
+
+    // Find and convert full state name to abbreviation if it exists
+    const stateMatch = states.find(state => state.abbreviation.toLowerCase() === normalizedSearch);
+    if (stateMatch) {
+      normalizedSearch = stateMatch.name.toLowerCase();
+    }
+    
+    // Filter based on the updated normalized search term
     const results = location.filter(result => 
-      result.state === search || 
-      result.city === search || 
-      result.zipCode === search
+      result.state?.toLowerCase() === normalizedSearch || 
+      result.city?.toLowerCase() === normalizedSearch || 
+      result.zipCode?.toLowerCase() === normalizedSearch
     );
-
+    
     setSearchResult(results);
-    console.log('Search Results:', results);
-  };
-
+    console.log('Search Results:', results, location, search);
+  }    
+  
   return (
     <>
       <Box sx={column}>
@@ -77,6 +88,10 @@ export const SearchBar = ({ setSearchResult }) => {
           <Button onClick={handleSearch}>
             Search
           </Button>
+          <Button onClick={() => setOpen(true)}>
+            Filter
+          </Button>
+          <Filter open={open} setOpen={setOpen}/>
         </Box>
       </Box>
     </>

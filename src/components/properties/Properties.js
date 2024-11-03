@@ -9,7 +9,7 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../api/firebase-config';
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { AppContext } from '../../context';
 import { useSelector } from 'react-redux';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -17,6 +17,7 @@ import { storage } from '../../api/firebase-config';
 import { v4 as uuidv4 } from 'uuid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './properties.module.scss';
+import axios from 'axios';
 
 export const Properties = () => {
     const navigate = useNavigate();
@@ -45,6 +46,21 @@ export const Properties = () => {
         fetchData();
     }, [user]);
 
+    useEffect(() => {
+        console.log ( "calling information: ")
+
+        const retrieveData = async () => {
+            try{
+                const fetch = axios.post( "http://ec2-54-164-148-130.compute-1.amazonaws.com:5000/predict")
+                console.log ( "calling information: ", fetch.data)
+            } catch (error){
+                console.error("Could not connect")
+            }
+        }
+
+        retrieveData()
+    },[])
+
     const {
         register,
         handleSubmit,
@@ -58,7 +74,16 @@ export const Properties = () => {
 
             if (editMode && selectedProperty) { 
                 const propertyDocRef = doc(userDocRef, "properties", selectedProperty.propertyName);
-                await setDoc(propertyDocRef, { ...data, imageUrls }, { merge: true });
+                const originalDocSnapshot = await getDoc(propertyDocRef)
+                const originalData = originalDocSnapshot.data()
+                const originalPrice = originalData.pricePerNight
+                console.log("original price per night:", originalPrice)
+                await setDoc(propertyDocRef, { ...data,
+                    originalPrice:originalPrice,
+                    imageUrls 
+                }, { merge: true });
+
+
             } else {
                 const propertyDocRef = doc(userDocRef, "properties", data.propertyName);
                 await setDoc(propertyDocRef, { ...data, imageUrls });
@@ -126,6 +151,7 @@ export const Properties = () => {
         updatedImages.splice(index, 1);
         setImageUrls(updatedImages);
     };
+
 
     return (
         <div className={styles.container}>
