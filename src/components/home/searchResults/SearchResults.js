@@ -8,7 +8,7 @@ import { AvailabilityModal } from "../availability/AvailabilityModal";
 
 
 export const SearchResults = ({ searchResult }) => {
-  const { row, column } = useContext(AppContext);
+  const { row } = useContext(AppContext);
   const [open,setOpen] = useState(false)
   const [selectedImage, setSelectedImage] = useState(""); // State to track selected image
   const [openRentModal,setOpenRentModal] = useState(false)

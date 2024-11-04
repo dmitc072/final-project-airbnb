@@ -5,7 +5,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 import { db } from "../../../api/firebase-config";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
@@ -16,11 +15,8 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
 
 
   const {
-    control,
     setValue,
     handleSubmit,
-    formState: { errors, isSubmitted },
-    reset,
     watch, // Allows you to monitor form values
   } = useForm({
     defaultValues: {
@@ -54,7 +50,7 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
       try{
  
         const locationCollectionRef = collection(db,"users",propertyData.user,"properties",propertyData.propertyName,"PendingApproval") //propertyData.user was added to the data to get in SearchBar.js.
-        const locationSnapshot = await addDoc(locationCollectionRef, { //Since odd path and not even, I have to use collect
+        await addDoc(locationCollectionRef, { //Since odd path and not even, I have to use collect
           fromDate: formatFromDate,
           toDate: formattedToDate,
           requestingUser:user.email,
@@ -67,10 +63,10 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
       }
     }
     pendingRequest()
-    console.log("Form submitted with data:", {
-      fromDate: formatFromDate,
-      toDate: formattedToDate
-    }, "Property Data: ",propertyData.user);
+    // console.log("Form submitted with data:", {
+    //   fromDate: formatFromDate,
+    //   toDate: formattedToDate
+    // }, "Property Data: ",propertyData.user);
     alert("Request is sent!")
     onClose()
 

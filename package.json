@@ -1,5 +1,6 @@
 {
   "name": "airbnb",
+  "homepage": "https://airbnb-34423.web.app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

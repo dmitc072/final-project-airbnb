@@ -3,9 +3,8 @@ import { Signup } from "../src/components/signup/SignUp";
 import { SignIn } from "../src/components/signin/SignIn";
 import { DashboardRoute } from "./components/dashboard/DashboardRoute.js";
 import { Splash } from "./components/splash/Splash.js";
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { persistor } from './store';
+import React from 'react';
+
 
 function App() {
   

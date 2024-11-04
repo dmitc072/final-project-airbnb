@@ -1,6 +1,6 @@
 import { Button, Typography } from "@mui/material"
 import styles from "./pendingApproval.module.scss"
-import { collection, deleteDoc, doc, getDoc, getDocs, QuerySnapshot, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useContext, useEffect, useState } from "react";
 import { db } from "../../api/firebase-config";
@@ -9,8 +9,7 @@ import { AppContext } from "../../context";
 export const PendingApprovalforHost = () => {
     const {user} = useSelector(state => state.auth)
     const [pendingProperties,setPendingProperties] = useState([])
-    const filterPendingProperties = pendingProperties.filter(property => property != undefined)
-    const {row,column} =useContext(AppContext)
+    const filterPendingProperties = pendingProperties.filter(property => property !== undefined)
 
     useEffect(() => {
         const fetchPropertiesForApproval = async () => {
@@ -63,7 +62,7 @@ export const PendingApprovalforHost = () => {
             
             // Delete the document
             await deleteDoc(docRef);
-            console.log("Deleted requested");
+          //  console.log("Deleted requested");
     
             setPendingProperties((prev) => //prev: Refers to the current state of pendingProperties
                 prev.map((property) => {
@@ -93,12 +92,12 @@ export const PendingApprovalforHost = () => {
         const copyData = await getDoc(querySnapshot)
         //console.log("copied data: ",copyData.data())
         const approvalDoc = doc(db,"users",user.email,"properties",pendingProperty.id,"Approval",pendingRequestID)
-        const changeToApproval = await setDoc(approvalDoc,
+        await setDoc(approvalDoc,
             copyData.data(),
             {merge:true}
         )
         
-        const deletePending = await deleteDoc(querySnapshot)
+        await deleteDoc(querySnapshot)
         console.log("Deleted requested");
 
         setPendingProperties((prev) => //prev: Refers to the current state of pendingProperties

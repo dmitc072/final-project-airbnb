@@ -6,9 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { theme } from './Theme';
 import { ThemeProvider } from '@mui/material/styles'
 import { Provider } from 'react-redux'
-import { store ,persistor} from "./store";
+import { store } from "./store";
 import AppContextProvider from './context.js';
-import { PersistGate } from 'redux-persist/integration/react';
 import { initializeAuth } from '../src/features/users/users.js';
 
 

@@ -3,7 +3,6 @@ import { AppContext } from "../../../context.js";
 import { collection, getDocs } from "firebase/firestore"; 
 import { db } from "../../../api/firebase-config.js";
 import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useSelector } from "react-redux";
 import { Filter } from "../searchResults/Filter.js";
 
 export const SearchBar = ({ setSearchResult }) => {
@@ -12,7 +11,6 @@ export const SearchBar = ({ setSearchResult }) => {
   const [search, setSearch] = useState('');
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); 
-  const { isHostChecked } = useSelector((state) => state.auth.user)
   const [open,setOpen] = useState(false)
 
  
@@ -34,7 +32,7 @@ export const SearchBar = ({ setSearchResult }) => {
           locationSnapshot.forEach(locationDoc => {
             locationsArray.push({...locationDoc.data(),user:userDoc.id}); // Push data into the temporary array and retrieve the user
           });
-          console.log("location array ",locationsArray)
+         // console.log("location array ",locationsArray)
         }
       });
   
@@ -66,7 +64,7 @@ export const SearchBar = ({ setSearchResult }) => {
     );
     
     setSearchResult(results);
-    console.log('Search Results:', results, location, search);
+    //console.log('Search Results:', results, location, search);
   }    
   
   return (

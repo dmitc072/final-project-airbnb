@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { auth, db } from '../../api/firebase-config';
 import { signInWithEmailAndPassword, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useSelector } from 'react-redux';
 
 // Define an async thunk for user sign-in
 export const signinUser = createAsyncThunk(

@@ -1,5 +1,4 @@
-import { Typography } from "@mui/material"
-import styles from "./approvedProperties.module.scss"
+
 import { useEffect, useState } from "react";
 import { collection, doc, getDocs } from "firebase/firestore";
 import { db } from "../../api/firebase-config.js";
@@ -27,7 +26,6 @@ useEffect(() => {
 
             await Promise.all(
                 querySnapshot.docs.map(async (user) => {
-                    const userData = user.data();
                     const checkProperties = await getDocs(collection(db, "users", user.id, "properties"));
 
                     await Promise.all(

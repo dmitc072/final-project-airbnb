@@ -61,7 +61,7 @@ export const PendingApprovalMessages = () => { // Ensure the component name is c
             navigate('/dashboard/pendingapproval');
 
         }
-    }, [message, showAlert]);
+    }, [message, showAlert, navigate]);
 
     return null; // No need to render anything here
 };

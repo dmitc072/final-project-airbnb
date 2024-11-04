@@ -7,15 +7,13 @@ import {
     Button,
     TextField,
     Typography,
-    ThemeProvider,
     createTheme,
     InputAdornment,
     IconButton,
-    FormHelperText
 } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore"; 
 import axios from 'axios';
 import { auth, db } from '../../api/firebase-config'; // Import auth and db
@@ -36,20 +34,13 @@ export const Signup = () => {
   
     const handleMouseDownPassword = (event) =>event.preventDefault();
 
-    const dispatch = useDispatch();
 
 
     const {
         control, //Used for controlled inputs, typically with components like Controller.
-        setValue, //Sets the value of a specific form field.
-        //watch, //Watches specific form fields and returns their values.
         register, //Registers an input or select element and applies the appropriate validation rules.
         formState: { errors,isSubmitted }, //Contains form state such as validation errors.
         handleSubmit, //Handles form submission and validation.
-        reset, // Resets the form to its default values.
-        //setFocus, //Sets the focus to a specific form field.
-        //setError,
-        //clearErrors,
     } = useForm({
         defaultValues: {
             firstName: "",
@@ -64,13 +55,7 @@ export const Signup = () => {
             photoURL:null
         }
     })
-    const theme = createTheme({
-        typography: {
-            fontSize: 12,
-            fontWeightRegular: 700, 
-                    },
-  
-      });
+
       
       const onSubmit = async (data) => {
         try {
@@ -91,7 +76,7 @@ export const Signup = () => {
     
             // Create user with Firebase Authentication only if the server is available
             if (isServerAvailable) {
-               const deleteUsers = await axios.post('http://localhost:3001/deleteUsers');
+                await axios.post('http://localhost:3001/deleteUsers');
                 const response = await axios.post('http://localhost:3001/signup',
                     {
                         firstName: data.firstName,
@@ -110,7 +95,7 @@ export const Signup = () => {
                         }
                     }
                 );
-                console.log("User registered:", response.data);
+             //   console.log("User registered:", response.data);
             } else {
                 // If server is not available, save user data to Firestore
                 const userDocRef = doc(db, "users", data.email); // Use email or another unique identifier
@@ -131,7 +116,6 @@ export const Signup = () => {
     
             // Create user with Firebase Authentication
             const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-            const user = userCredential.user;
 
             // Dispatch the action to set isRenterChecked to true
             //dispatch(setRenterChecked(true));   //removed because the initial loginSLice on user.js overwrites it   
