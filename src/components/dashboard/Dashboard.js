@@ -18,6 +18,7 @@ import { Home } from '../home/Home.js';
 import { ThemeProvider } from '@mui/material/styles'
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { Profile } from '../profile/Profile.js';
 
 
 const NAVIGATION = [
@@ -105,6 +106,17 @@ export const Dashboard = () => {
     navigate('/signin');
   };
 
+  const renderComponent = () => {
+    switch (location.pathname) {
+      case '/dashboard':
+        return <Home />;
+      case '/dashboard/profile':
+        return <Profile />;
+      // Add additional cases here for other paths
+      default:
+        return <Home />;
+    }
+  };
   return (
 <AppProvider
   branding={{
@@ -134,8 +146,8 @@ export const Dashboard = () => {
           Sign out
         </Button>
       </Box>
-      <Outlet /> {/* Render child routes */}
-      {location.pathname === '/dashboard' && <Home />} {/* Show Home.js if path is /dashboard */}
+      {renderComponent()} {/* Renders component based on pathname */}
+
     </DashboardLayout>
   </ThemeProvider>
 </AppProvider>
