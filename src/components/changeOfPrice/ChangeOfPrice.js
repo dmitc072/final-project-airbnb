@@ -94,9 +94,7 @@ export const ChangeOfPrice = () => {
                                 },{merge:true}
                                 )
                             }
-                        } else {
-                            console.log(`Skipping property ${propertyDoc.id} due to invalid price data.`);
-                        }
+                        } 
                     }
                 }
     

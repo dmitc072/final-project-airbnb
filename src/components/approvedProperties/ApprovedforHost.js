@@ -64,7 +64,6 @@ export const ApprovedforHost = () => {
         alert(reviewMessage)
     }
 
-    //console.log(filterApprovedProperties)
     return (
         <>
         <div className={styles.container}>
@@ -84,7 +83,7 @@ export const ApprovedforHost = () => {
                                     <div >{approved.fromDate}</div>
                                     <Typography>To:</Typography>
                                     <div >{approved.toDate}</div>
-                                    {console.log(approved.reviewMessage)}
+                                    {/* {console.log(approved.reviewMessage)} */}
                                     
                                     <div className={styles.button}>
                                         <Button disabled={!approved.reviewMessage} onClick={()=>reviewMessage(approvedProperty, approved.reviewMessage)}>{(approved.reviewMessage) ? "See Review": "No Review"}</Button>
