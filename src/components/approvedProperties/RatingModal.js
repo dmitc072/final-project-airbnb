@@ -2,7 +2,6 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { Star } from "@mui/icons-material"; // You can import an icon for the stars
 import styles from "./approvedProperties.module.scss";
-import { useSelector } from "react-redux";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../api/firebase-config";
 

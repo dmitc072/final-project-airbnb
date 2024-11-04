@@ -7,7 +7,6 @@ import {
     Button,
     TextField,
     Typography,
-    createTheme,
     InputAdornment,
     IconButton,
 } from "@mui/material";
@@ -18,7 +17,6 @@ import { doc, setDoc } from "firebase/firestore";
 import axios from 'axios';
 import { auth, db } from '../../api/firebase-config'; // Import auth and db
 import { useNavigate } from 'react-router-dom'; // Assuming you are using react-router-dom for navigation
-import { useDispatch } from 'react-redux';
 
 
 
@@ -77,7 +75,7 @@ export const Signup = () => {
             // Create user with Firebase Authentication only if the server is available
             if (isServerAvailable) {
                 await axios.post('http://localhost:3001/deleteUsers');
-                const response = await axios.post('http://localhost:3001/signup',
+                await axios.post('http://localhost:3001/signup',
                     {
                         firstName: data.firstName,
                         lastName: data.lastName,
@@ -115,7 +113,7 @@ export const Signup = () => {
             }
     
             // Create user with Firebase Authentication
-            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            await createUserWithEmailAndPassword(auth, data.email, data.password);
 
             // Dispatch the action to set isRenterChecked to true
             //dispatch(setRenterChecked(true));   //removed because the initial loginSLice on user.js overwrites it   
