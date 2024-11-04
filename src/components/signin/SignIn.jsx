@@ -6,17 +6,13 @@ import {
     InputAdornment,
     IconButton,
 } from "@mui/material";import React from 'react';
-import styles from "./signin.module.scss"
 import { useForm } from "react-hook-form";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom'; 
 import {signinUser} from "../../features/users/users";
 import { useDispatch, useSelector } from 'react-redux';
-//import useSignIn from 'react-auth-kit/hooks/useSignIn';
-import axios from 'axios'
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from '../../api/firebase-config'; // Import auth and db
+
 
 
 
@@ -28,25 +24,17 @@ export const SignIn = () =>{
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const {user} = useSelector(state => state.auth)
   
     const handleMouseDownPassword = (event) =>event.preventDefault();
 
     const dispatch = useDispatch();
-    // const {isProfileComplete} = useSelector((state) => {
-    //     console.log(state.auth); // Check the full state structure
-    //     return state.auth;
-    //   });
 
 
 
     const {
-        control, //Used for controlled inputs, typically with components like Controller.
-        setValue, //Sets the value of a specific form field.
         register, //Registers an input or select element and applies the appropriate validation rules.
         formState: { errors,isSubmitted }, //Contains form state such as validation errors.
         handleSubmit, //Handles form submission and validation.
-        reset, // Resets the form to its default values.
     } = useForm({
         defaultValues: {
             password: "",
@@ -58,22 +46,16 @@ export const SignIn = () =>{
 
     const onSubmit = async (data) => {
     try {
-        console.log("Submitted Data:", data);
+       // console.log("Submitted Data:", data);
         const response = await dispatch(signinUser(data)).unwrap();
 
-        console.log("Response:", response);
+       // console.log("Response:", response);
 
         if (response) {
             const { status, isProfileComplete, message, pendingApprovalMessage,isHostChecked } = response;            //I assume this helped with loggin in twice
 
 
             if (status === 200) {
-                // Successful authentication
-                // if (pendingApprovalMessage && isHostChecked) {
-                //     // Navigate to pending approval page if there are pending requests
-                //     navigate('/dashboard/pendingapproval');
-                // } else {
-                //     // Navigate based on profile completion
                     navigate(isProfileComplete ? '/dashboard/profile' : '/dashboard');
                          
              } else if (status === 201) {

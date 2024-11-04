@@ -4,20 +4,16 @@ import {
     Button,
     TextField,
     Typography,
-    InputAdornment,
-    IconButton,
-    FormHelperText,
     Modal,
     FormGroup,
     FormControlLabel,
     Checkbox
 } from "@mui/material";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db, storage } from '../../api/firebase-config';
+import { db, storage } from '../../api/firebase-config';
 import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from "react-hook-form";
 import { AppContext } from '../../context';
@@ -29,12 +25,10 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export const Profile = () => {
     const navigate = useNavigate();
     const { row, column } = useContext(AppContext);
-    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [firstLoginOpen, setFirstLoginOpen] = useState(false);
     const [changeRequest, setChangeRequest] = useState(false);
-    const [imageURL, setImageURL] = useState("");
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -50,7 +44,6 @@ export const Profile = () => {
     const {
         control,
         register,
-        setValue,
         formState: { errors, isSubmitted },
         handleSubmit,
         reset,
@@ -73,10 +66,10 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
     
     const firstLoginModal = () => {
         if (isFirstLogin) {
-            console.log("isFirstLogin:", isFirstLogin)
+         //   console.log("isFirstLogin:", isFirstLogin)
             setFirstLoginOpen(true);
           //  dispatch(setIsFirstLogin(false))
-            console.log("newnisFirstLogin: ", isFirstLogin)
+          //  console.log("newnisFirstLogin: ", isFirstLogin)
         }
     };
 
@@ -105,7 +98,7 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
         if (isFirstLogin !== undefined) {
             firstLoginModal();
           }
-    }, [user]); // This will run only once, when the component first mounts
+    }, [user,firstLoginModal, isFirstLogin]); // This will run only once, when the component first mounts
     
     
 

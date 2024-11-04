@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./messages.module.scss";
-import { Box, Button, Typography, useMediaQuery } from "@mui/material";
+import { Button, Typography, useMediaQuery } from "@mui/material";
 
 export const Message = () => {
     const mobileView = useMediaQuery("(max-width: 590px)");

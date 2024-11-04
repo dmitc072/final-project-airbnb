@@ -8,7 +8,6 @@ import { db } from "../../api/firebase-config";
 
 export const RatingModal = ({ openRatingModal, setOpenRatingModal, data }) => {
     const onClose = () => setOpenRatingModal(false);
-    const { user } = useSelector((state) => state.auth);
 
     const {
         control,

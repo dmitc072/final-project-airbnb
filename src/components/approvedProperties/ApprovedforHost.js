@@ -1,6 +1,6 @@
 import { Button, Typography } from "@mui/material"
 import styles from "./approvedProperties.module.scss"
-import { collection, deleteDoc, doc, getDoc, getDocs, QuerySnapshot, setDoc } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useContext, useEffect, useState } from "react";
 import { db } from "../../api/firebase-config";
@@ -9,8 +9,7 @@ import { AppContext } from "../../context";
 export const ApprovedforHost = () => {
     const {user} = useSelector(state => state.auth)
     const [approvedProperties,setApprovedProperties] = useState([])
-    const filterApprovedProperties = approvedProperties.filter(property => property != undefined)
-    const {row,column} =useContext(AppContext)
+    const filterApprovedProperties = approvedProperties.filter(property => property !== undefined)
 
     useEffect(() => {
         const fetchPropertiesForApproval = async () => {
@@ -43,10 +42,10 @@ export const ApprovedforHost = () => {
                             
                         })
                     );
-                    console.log(propertyMap)
+                    // console.log(propertyMap)
                     setApprovedProperties(propertyMap);
                 } else {
-                    console.log("No properties found for approval.");
+                   // console.log("No properties found for approval.");
                 }
             } catch (error) {
                 console.error("Unable to retrieve Data: ", error);
@@ -61,7 +60,7 @@ export const ApprovedforHost = () => {
     
 
     const reviewMessage = async (approvedProperty, reviewMessage) => {
-        console.log(reviewMessage)
+       // console.log(reviewMessage)
         alert(reviewMessage)
     }
 

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Button,
@@ -7,10 +7,8 @@ import {
     IconButton,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useNavigate } from 'react-router-dom';
 import { db } from '../../api/firebase-config';
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { AppContext } from '../../context';
 import { useSelector } from 'react-redux';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../../api/firebase-config';
@@ -20,9 +18,6 @@ import styles from './properties.module.scss';
 import axios from 'axios';
 
 export const Properties = () => {
-    const navigate = useNavigate();
-    const { column } = useContext(AppContext);
-    const [selectedImages, setSelectedImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
     const { user } = useSelector((state) => state.auth);
     const [userProperty, setUserProperty] = useState([]);
@@ -47,12 +42,12 @@ export const Properties = () => {
     }, [user]);
 
     useEffect(() => {
-        console.log ( "calling information: ")
+       // console.log ( "calling information: ")
 
         const retrieveData = async () => {
             try{
                 const fetch = axios.post( "http://ec2-54-164-148-130.compute-1.amazonaws.com:5000/predict")
-                console.log ( "calling information: ", fetch.data)
+               // console.log ( "calling information: ", fetch.data)
             } catch (error){
                 console.error("Could not connect")
             }

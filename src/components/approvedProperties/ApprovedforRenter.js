@@ -5,7 +5,6 @@ import { useState } from "react"
 import { compareDateStringToToday } from "../functions/compareDateStringToToday"
 
 export const ApprovedforRenter = ({filterApprovedPropertiesData}) => {
-    const [open,setOpen] = useState(false)
     const [openRatingModal,setOpenRatingModal] = useState(false)
     const [data,setData] =useState([])
     //console.log("Approval Information: ", filterApprovedPropertiesData)

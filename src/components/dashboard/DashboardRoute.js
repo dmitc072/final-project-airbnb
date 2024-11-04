@@ -5,7 +5,7 @@ import { Dashboard } from './Dashboard';
 import { Home } from '../home/Home.js';
 import { Profile } from '../profile/Profile';
 import { Properties } from '../properties/Properties.js';
-import { Box, Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { AdvertiseProperty } from '../advertiseProperty/AdevertiseProperty.js';
 import { Message } from '../message/Message.js';
 import { PendingApproval } from '../pendingApproval/PendingApproval.js';
@@ -14,7 +14,6 @@ import { ApprovedProperties } from '../approvedProperties/ApprovedProperties.js'
 
 export const DashboardRoute = () => {
     const { user } = useSelector((state) => state.auth);
-    const navigate = useNavigate();
 
     if (!user) {
         return <Navigate to="/signin" replace />;

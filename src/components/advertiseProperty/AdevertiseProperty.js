@@ -59,8 +59,8 @@ export const AdvertiseProperty = () => {
     const addressValue = watch('address')
     const cityValue = watch('city')
     const stateValue = watch('state')
-    const latitudeValue = watch('latitude');
-    const longitudeValue = watch('longitude');
+    //const latitudeValue = watch('latitude');
+    //const longitudeValue = watch('longitude');
     const roomTypeValue = watch('roomType');
 
     const onSubmit = async (data) => {

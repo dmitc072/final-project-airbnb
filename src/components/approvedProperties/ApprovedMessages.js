@@ -52,7 +52,7 @@ export const ApprovedMessages = () => { // Ensure the component name is capitali
         };
 
         fetchRequest();
-    }, [user, pendingApprovalMessage, dispatch]);
+    }, [user, pendingApprovalMessage, dispatch, navigate]);
 
     useEffect(() => {
         if (!showAlert && message.length > 0) {

@@ -120,12 +120,12 @@ export const ChangeOfPrice = () => {
         if(!priceChange) {
             priceChangeFunction();
         }
-    }, [db, user.email]); // Dependencies
+    }, [db, user.email, dispatch]); // Dependencies
     
 
     useEffect(()=>{
         if(showAlert) alert(alertMessage)
-    },[showAlert])
+    },[showAlert, alertMessage])
 
     return null
 }    
