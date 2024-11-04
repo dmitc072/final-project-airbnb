@@ -2,9 +2,8 @@ import { Button, Typography } from "@mui/material"
 import styles from "./pendingApproval.module.scss"
 import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../../api/firebase-config";
-import { AppContext } from "../../context";
 
 export const PendingApprovalforHost = () => {
     const {user} = useSelector(state => state.auth)

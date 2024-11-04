@@ -11,7 +11,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom'; 
 import {signinUser} from "../../features/users/users";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 
 
@@ -52,7 +52,7 @@ export const SignIn = () =>{
        // console.log("Response:", response);
 
         if (response) {
-            const { status, isProfileComplete, message, pendingApprovalMessage,isHostChecked } = response;            //I assume this helped with loggin in twice
+            const { status, isProfileComplete, message } = response;            //I assume this helped with loggin in twice
 
 
             if (status === 200) {

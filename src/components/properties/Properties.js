@@ -47,7 +47,7 @@ export const Properties = () => {
         const retrieveData = async () => {
             try{
                 const fetch = axios.post( "http://ec2-54-164-148-130.compute-1.amazonaws.com:5000/predict")
-               // console.log ( "calling information: ", fetch.data)
+               console.log ( "calling information: ", fetch.data)
             } catch (error){
                 console.error("Could not connect")
             }

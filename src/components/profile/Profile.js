@@ -64,14 +64,7 @@ export const Profile = () => {
     });
 console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileComplete)
     
-    const firstLoginModal = () => {
-        if (isFirstLogin) {
-         //   console.log("isFirstLogin:", isFirstLogin)
-            setFirstLoginOpen(true);
-          //  dispatch(setIsFirstLogin(false))
-          //  console.log("newnisFirstLogin: ", isFirstLogin)
-        }
-    };
+
 
     
 
@@ -95,10 +88,19 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
     }, [user, isHostChecked, isRenterChecked, isProfileComplete, reset]);
 
     useEffect(() => {
+        const firstLoginModal = () => {
+            if (isFirstLogin) {
+             //   console.log("isFirstLogin:", isFirstLogin)
+                setFirstLoginOpen(true);
+              //  dispatch(setIsFirstLogin(false))
+              //  console.log("newnisFirstLogin: ", isFirstLogin)
+            }
+        };
+
         if (isFirstLogin !== undefined) {
             firstLoginModal();
           }
-    }, [user,firstLoginModal, isFirstLogin]); // This will run only once, when the component first mounts
+    }, [user, isFirstLogin]); // This will run only once, when the component first mounts
     
     
 
