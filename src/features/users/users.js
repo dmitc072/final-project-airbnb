@@ -14,8 +14,9 @@ export const signinUser = createAsyncThunk(
       const token = await user.getIdToken();
 
       // Fetch additional user information from Firestore
-      const userDocRef = doc(db, 'users', user.email);
-      const userDoc = await getDoc(userDocRef);
+      const email = user.email.trim().toLowerCase(); // Standardize for consistency
+      const userDocRef = doc(db, 'users', email);
+            const userDoc = await getDoc(userDocRef);
 
       if (!userDoc.exists()) {
         throw new Error('User document does not exist in Firestore.');

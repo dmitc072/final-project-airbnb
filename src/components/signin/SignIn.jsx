@@ -49,14 +49,14 @@ export const SignIn = () =>{
        // console.log("Submitted Data:", data);
         const response = await dispatch(signinUser(data)).unwrap();
 
-       // console.log("Response:", response);
+       console.log("Response:", response);
 
         if (response) {
-            const { status, isProfileComplete, message } = response;            //I assume this helped with loggin in twice
-
+            const { status, message } = response;            //I assume this helped with loggin in twice
+            const {isProfileComplete} = response.data;
 
             if (status === 200) {
-                    navigate(isProfileComplete ? '/dashboard/profile' : '/dashboard');
+                    navigate(!isProfileComplete ? '/dashboard/profile' : '/dashboard');
                          
              } else if (status === 201) {
                 alert(message || "Profile is not complete."); // Provide a fallback message

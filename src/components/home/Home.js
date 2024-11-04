@@ -9,13 +9,9 @@ import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
     const [searchResult, setSearchResult] = useState([]);
-    const {  isProfileComplete } = useSelector((state) => state?.auth?.user)
     const navigate = useNavigate()
 
-    useEffect(()=>{
-        if(!isProfileComplete)
-            navigate('/dashboard/profile')
-    },[])
+
 
     return (
         <>   
