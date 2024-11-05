@@ -88,7 +88,10 @@ export const SearchResults = ({ searchResult }) => {
       </Modal>
       <AvailabilityModal openRentModal={openRentModal} setOpenRentModal={setOpenRentModal} propertyData={propertyData}/>
       {/* Display per property */}
-      <Box sx={{ ...row, display: 'flex', flexWrap: 'wrap', alignItems:"flex-start", gap: 2 }}>
+      {searchResult.length > 0 ?
+      
+      (<Box sx={{ ...row, display: 'flex', flexWrap: 'wrap', alignItems:"flex-start", gap: 2 }}>
+        {console.log("length", searchResult.length)}
         {searchResult.map((result, index) => (
           <Box
             key={index}
@@ -132,7 +135,8 @@ export const SearchResults = ({ searchResult }) => {
             <Button onClick={() => checkAvailablity(result)}>Rent Location</Button>
             </Box>
         ))}
-      </Box>
+      </Box>):
+      (<Typography className={styles.center}> No result!</Typography>)}
     </div>
   );
 };

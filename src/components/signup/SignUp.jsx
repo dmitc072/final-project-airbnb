@@ -1,5 +1,4 @@
-import styles from "./signup.module.scss";
-import PhoneInput from 'react-phone-input-2';
+
 import 'react-phone-input-2/lib/style.css';
 import React from 'react';
 import {
@@ -14,13 +13,12 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore"; 
-import axios from 'axios';
 import { auth, db } from '../../api/firebase-config'; // Import auth and db
 import { useNavigate } from 'react-router-dom'; // Assuming you are using react-router-dom for navigation
 
 
 
-import { Controller, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 
 
 export const Signup = () => {
@@ -35,7 +33,6 @@ export const Signup = () => {
 
 
     const {
-        control, //Used for controlled inputs, typically with components like Controller.
         register, //Registers an input or select element and applies the appropriate validation rules.
         formState: { errors,isSubmitted }, //Contains form state such as validation errors.
         handleSubmit, //Handles form submission and validation.

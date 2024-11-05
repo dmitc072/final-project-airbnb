@@ -3,7 +3,7 @@ import { AppContext } from "../../../context.js";
 import { collection, getDocs } from "firebase/firestore"; 
 import { db } from "../../../api/firebase-config.js";
 import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { Filter } from "../searchResults/Filter.js";
+import { Filter } from "./Filter.js";
 
 export const SearchBar = ({ setSearchResult }) => {
   const { row, column, states } = useContext(AppContext);
@@ -12,6 +12,7 @@ export const SearchBar = ({ setSearchResult }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); 
   const [open,setOpen] = useState(false)
+  const [priceValue, setPriceValue] = useState([0, 1000]);
 
  
   // Fetches all locations
@@ -89,7 +90,7 @@ export const SearchBar = ({ setSearchResult }) => {
           <Button onClick={() => setOpen(true)}>
             Filter
           </Button>
-          <Filter open={open} setOpen={setOpen}/>
+          <Filter open={open} setOpen={setOpen} priceValue={priceValue} setPriceValue={setPriceValue}/>
         </Box>
       </Box>
     </>

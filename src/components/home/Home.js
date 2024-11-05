@@ -1,15 +1,12 @@
 import { SearchResults } from '../home/searchResults/SearchResults.js';
 import { SearchBar } from '../home/searchBar/SearchBar.js';
-import { useState, useEffect} from "react"
+import { useState} from "react"
 import { PendingApprovalMessages } from '../pendingApproval/PendingApprovalMessages.js';
 import {ChangeOfPrice} from '../changeOfPrice/ChangeOfPrice.js'
-import { useSelector,useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 
 export const Home = () => {
     const [searchResult, setSearchResult] = useState([]);
-    const navigate = useNavigate()
 
 
 
