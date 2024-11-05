@@ -33,7 +33,7 @@ export const SearchBar = ({ setSearchResult }) => {
           locationSnapshot.forEach(locationDoc => {
             locationsArray.push({...locationDoc.data(),user:userDoc.id}); // Push data into the temporary array and retrieve the user
           });
-         // console.log("location array ",locationsArray)
+          console.log("location array ",locationsArray)
         }
       });
   
@@ -64,7 +64,14 @@ export const SearchBar = ({ setSearchResult }) => {
       result.zipCode?.toLowerCase() === normalizedSearch
     );
     
-    setSearchResult(results);
+    const filterResults = results.filter(result =>
+      result.pricePerNight >= priceValue[0] &&
+      result.pricePerNight <= priceValue[1]
+
+    )
+
+
+    setSearchResult(filterResults);
     //console.log('Search Results:', results, location, search);
   }    
   

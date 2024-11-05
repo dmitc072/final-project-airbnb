@@ -7,9 +7,15 @@ export const Filter = ({ open, setOpen, priceValue, setPriceValue }) => {
 
 
   const handleClose = () => { 
-    setPriceValue(originalPriceValue)
     setOpen(false) 
   };
+
+  const handleSave = () =>{
+    setPriceValue(originalPriceValue)
+    console.log(priceValue)
+    setOpen(false) 
+
+  }
 
   function originalPriceValuetext(originalPriceValue) {
     return `$${originalPriceValue}`;
@@ -95,8 +101,11 @@ export const Filter = ({ open, setOpen, priceValue, setPriceValue }) => {
             />
           </div>
           <div>
+            <Button sx={{ m: 2 }} onClick={handleSave}>
+              Save
+            </Button>
             <Button sx={{ m: 2 }} onClick={handleClose}>
-              Close
+              Cancel
             </Button>
           </div>
         </Box>
