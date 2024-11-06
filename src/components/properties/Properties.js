@@ -23,6 +23,7 @@ export const Properties = () => {
     const [editMode, setEditMode] = useState(false);
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [error, setError] = useState('');
+    const [refresh, setRefresh] = useState(false)
 
     //fetch users locations
     useEffect(() => {
@@ -125,13 +126,41 @@ export const Properties = () => {
         setImageUrls(urls);
         setError('');
     };
-
-    const handleRemoveImage = (index) => {
+    
+    const handleRemoveImage = async (index) => {
+        // Remove the selected image from the local array
         const updatedImages = [...imageUrls];
         updatedImages.splice(index, 1);
         setImageUrls(updatedImages);
+    
+        // If in edit mode, update Firestore with the new array
+        if (editMode && selectedProperty) {
+            try {
+                const userDocRef = doc(db, "users", user.email);
+                const propertyDocRef = doc(userDocRef, "properties", selectedProperty.propertyName);
+                await setDoc(propertyDocRef, { imageUrls: updatedImages }, { merge: true });
+    
+                // Update the userProperty state to reflect the updated image array
+                setUserProperty((prevProperties) =>
+                    prevProperties.map((property) =>
+                        property.propertyName === selectedProperty.propertyName
+                            ? { ...property, imageUrls: updatedImages }
+                            : property
+                    )
+                );
+            } catch (error) {
+                console.error("Error updating Firestore images:", error);
+            }
+        }
     };
+    
 
+    useEffect(()=>{
+        if(refresh){
+
+            setRefresh(false)
+        }
+    },[refresh])
 
     return (
         <div className={styles.container}>
@@ -147,19 +176,21 @@ export const Properties = () => {
                                             alt={`Property Image ${idx + 1}`}
                                             style={{ maxWidth: '100px', height: 'auto' }}
                                         />
-                                        <IconButton
-                                            size="small"
-                                            onClick={() => handleRemoveImage(idx)}
-                                            style={{
-                                                position: 'absolute',
-                                                top: 0,
-                                                right: 0,
-                                                color: 'red',
-                                                backgroundColor: 'white',
-                                            }}
-                                        >
+                                         {editMode && selectedProperty?.propertyName === property.propertyName &&  
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => handleRemoveImage(idx)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    right: 0,
+                                                    color: 'red',
+                                                    backgroundColor: 'white',
+                                                }}
+                                            >
                                             <DeleteIcon />
-                                        </IconButton>
+                                            </IconButton>
+                                        }
                                     </Box>
                                 ))
                             ) : (
