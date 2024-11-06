@@ -70,16 +70,14 @@ export const Signup = () => {
                     photoURL:data.photoURL
 
                 });
-                console.log("User data saved to Firestore.");
-            
-    
+
      
 
             // Dispatch the action to set isRenterChecked to true
             //dispatch(setRenterChecked(true));   //removed because the initial loginSLice on user.js overwrites it   
              alert('User registered successfully');
-            navigate("/signin")
-    
+            //navigate("/signin")
+            navigate('/dashboard/profile');
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
                 alert("Email is already in use. Please use a different email.");
@@ -146,10 +144,11 @@ export const Signup = () => {
                     sx={{ height: errors.password?.type === 'pattern' ? 100 : null }} 
                     {...register("password", { 
                         required: "Password is required", 
-                        pattern: {
-                            value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                            message: "Password must contain at least 8 characters, including uppercase, lowercase, number, and special character."
-                        }})}
+                        minLength: {
+                            value: 6,
+                            message: "Password must be exactly 6 characters."
+                        },
+                    })}
                     placeholder="Password"
                     type={showPassword ? 'text' : 'password'}
                     error={isSubmitted && !!errors.password}
