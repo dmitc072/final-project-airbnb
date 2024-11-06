@@ -243,7 +243,7 @@ export const Profile = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={styles.modal}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2" align="center">
+                    <Typography id="modal-modal-title" variant="h6" component="h2" align="center" color="black">
                         Do you want to be a Host?
                     </Typography>
                     <Box sx={row}>
@@ -372,7 +372,7 @@ export const Profile = () => {
                         </Box>
                         <Box mb={2}>
                             <Typography>Profile Picture</Typography>
-                            <input
+                            <input 
                                 type="file"
                                 accept="image/*"
                                 onChange={handleFileChange}

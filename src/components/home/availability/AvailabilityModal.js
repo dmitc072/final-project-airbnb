@@ -86,7 +86,7 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
         component="form"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Typography variant="h4">Select days you want to stay!</Typography>
+        <Typography sx={{textAlign:"center"}}variant="h4">Select days you want to stay!</Typography>
         <br/>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <MobileDatePicker

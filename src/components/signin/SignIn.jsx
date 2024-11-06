@@ -153,10 +153,11 @@ export const SignIn = () =>{
                          }} 
                         {...register("password", { 
                             required: "Password is required", 
-                            pattern: {
-                                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                                message: "Password must contain at least 8 characters, including uppercase, lowercase, number, and special character."
-                            }})}
+                            minLength: {
+                                value: 6,
+                                message: "Password must be exactly 6 characters."
+                            },
+                        })}
                         placeholder="Password"
                         type={showPassword ? 'text' : 'password'}
                         error={isSubmitted && !!errors.password}

@@ -12,6 +12,7 @@ export const theme = (mode) => createTheme({
     typography: {
         h1: {
             fontWeight: 400,
+            
         },
         h3: {
             fontWeight: 300,
@@ -28,7 +29,7 @@ export const theme = (mode) => createTheme({
                     borderRadius: "30px",
                     margin: "10px",
                     padding: "10px 20px",
-                    color: '#FFFFFF',
+                    color: 'black',
                     backgroundColor: '#B8F3FF',
                     "&:hover": {
                         backgroundColor: '#0082AD',
@@ -125,7 +126,7 @@ export const theme = (mode) => createTheme({
                             borderColor: '#3B3C86',
                         },
                         '& input': {
-                            color: 'black', // Set text color to black
+                            color: mode === 'dark' ? 'black' : 'black' ,
                             padding: '10px', // Consistent padding
                         },
                     },

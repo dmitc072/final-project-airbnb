@@ -442,6 +442,7 @@ export const AdvertiseProperty = () => {
                             value={longitude}
                             disabled
                             fullWidth
+                            sx={{color:"black"}}
                         />
                     </Box>
                     {/* Room Type */}
@@ -459,6 +460,7 @@ export const AdvertiseProperty = () => {
                                     height: "43px",
                                     background: "white",
                                     border: ".2px black solid",
+                                    color:"black"
                                   
                                 }}
                             >
