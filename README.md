@@ -1,23 +1,27 @@
-Install " npm install @toolpad/core " for the Navbar
+npm install
+npm install @toolpad/core  # Required for Navbar functionality
+Netlify is used to deploy the app.
+"_redirects" file was added in the public folder to allow the routes to function correctly
 
 
-1. I created the dashboard first,
-2. Create Profile
-3. Create Advertising Property
-4. Create Listing Properties
-5. Created Search
-6. Create Message
-7. Create modal for Search and other components in Search //created request to rent
-8. Create Pending Approval
-9.Send an alert to host that he has approvals
-10.Update Redux to signout to set the value of pendinApprovalMessage back to its initial value
-11. update PendingApprovalHost.js, to approve or dissaprove request
-12. Needed to add price change so I created a new value in firebase under the property in Properties.js
-13. Create a notice to inform guest of change of price and added a boolean in redux to trigger it once on log in
-14. created a folder called function to convert the dates
-15. Created a Modal which the component is called RatingModal.js which is connected to ApprovedforRenter, toi
-16. Create a useEffect to hand a DOM change with the light and dark mode. Changed the theme to connect with it.
-Requesting to rent:
-search for property,
-click you would like to rent after submitting a date.
-message go to host
+Features
+Dashboard Creation - Set up the initial dashboard for user navigation and management.
+Profile Creation - Enable users to create and manage their profiles.
+Advertise Property - Add properties for listing and rental.
+Listing Properties - List available properties for easy viewing and filtering.
+Property Search - Created a search functionality to find listed properties.
+Messaging - Allow hosts and guests to communicate.
+Modals for Search & Rental Requests - Implemented a modal component to handle search results and rental requests.
+Pending Approval - Added a section for hosts to manage rental requests that require approval.
+Host Alerts for Approvals - Notify hosts when they receive new rental approval requests.
+Redux Sign-Out Update - Reset pendingApprovalMessage to its initial value on sign-out.
+Approval Management - Updated PendingApprovalHost.js to allow hosts to approve or disapprove rental requests.
+Dynamic Pricing - Added price change capability in Properties.js, stored in Firebase.
+Price Change Notification - Created a notice to inform guests of price changes, with a Redux-triggered boolean to display it on login.
+Date Conversion Utility - Created a functions folder to manage date conversions.
+Rating Modal - Added RatingModal.js component to connect with ApprovedforRenter, allowing renters to leave ratings.
+Dark & Light Mode Theme Toggle - Implemented a useEffect to handle theme changes, supporting dark and light modes.
+Requesting to Rent
+Search for Property - Use the search feature to find properties.
+Submit Rental Request - Submit desired dates and request to rent.
+Message Host - Direct message goes to the host once a rental request is submitted.
