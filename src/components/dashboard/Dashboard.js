@@ -46,11 +46,11 @@ const NAVIGATION = [
     title: 'Listing Properties',
     icon: <FormatListBulletedIcon />,
   },
-  {
-    segment: 'dashboard/message',
-    title: 'Message',
-    icon: <MessageIcon />,
-  },
+  // {
+  //   segment: 'dashboard/message',
+  //   title: 'Message',
+  //   icon: <MessageIcon />,
+  // },
   {
     segment: 'dashboard/pendingapproval',
     title: 'Pending Approval',
