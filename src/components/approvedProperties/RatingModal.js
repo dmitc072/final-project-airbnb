@@ -35,9 +35,13 @@ export const RatingModal = ({ openRatingModal, setOpenRatingModal, data }) => {
         console.log("Submitted Data:", formData, "data:", data);
     
         try {
+            const today = new Date();
+            const formattedDate = `${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}/${today.getFullYear()}`;
+
             const propertyDocRef = doc(db, "users", host, "properties", propertyName, "Approval",propertyId);
             await setDoc(propertyDocRef, {
                 ...formData,
+                review_date:formattedDate,
                 reviewSent: true,
             }, { merge: true });
             console.log("Document successfully written!");

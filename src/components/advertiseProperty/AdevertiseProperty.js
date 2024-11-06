@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect,useRef } from 'react';
+
 import {
     Box,
     Button,
@@ -8,12 +9,13 @@ import {
     FormControl,
     Select,
     Autocomplete,
-    MenuItem
+    MenuItem,
+    Modal
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../api/firebase-config'; // Adjust the import based on your actual file structure
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { AppContext } from '../../context';
 import { PhotoCamera } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
@@ -22,6 +24,9 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../../api/firebase-config'; // Adjust the import based on your actual file structure
 import styles from './advertiseProperty.module.scss'
 import axios from 'axios';
+import { isDateWithin30Days } from './isDateWithin30Days';
+import { dateConversion } from './dateConversion';
+import { formatDateToString } from './convertDateToString';
 
 export const AdvertiseProperty = () => {
     const navigate = useNavigate();
@@ -32,10 +37,14 @@ export const AdvertiseProperty = () => {
     const [latitude, setLatitude] = useState(null);
     const [longitude, setLongitude] = useState(null)
     const [imageUploaded, setImageUploaded] = useState(true)
+    const [open,setOpen] = useState(false)
+    const [newPrice, setNewPrice] = useState(null)
+
     const {
         register,
         handleSubmit,
         watch,
+        setValue,
         control,
         formState: { errors, isSubmitted },
     } = useForm({
@@ -50,11 +59,13 @@ export const AdvertiseProperty = () => {
             contactEmail: "",
             images: [], // Handle multiple images
             available:true, //sets the house to avilable
-            roomType:"",
+            roomType:"Entire home/apt",
             latitude: latitude,
             longitude: longitude
         }
     });
+
+    const handleClose = () => {setOpen(false)}
 
     const addressValue = watch('address')
     const cityValue = watch('city')
@@ -125,47 +136,154 @@ export const AdvertiseProperty = () => {
 
     const priceCalculator = async () => {
         try {
-        const data = {
-            latitude: latitude,
-            longitude: longitude,
-            minimum_nights: 1,
-            room_type: roomTypeValue, // Adding roomType here
-            price:129,
-            neighbourhood_group:cityValue,
-            neighbourhood:cityValue,
-            number_of_reviews:1,
-            last_review:"10/11/2022",
-            calculated_host_listings_count:2,
-            availability_365:365,
-            reviews_per_month:1
+            // Fetch the properties collection for the user
+            const fetchData = await getDocs(collection(db, "users", user.email, "properties"));
             
-        };
+            const approvedProperties = []; 
+    
+            // Use for...of loop to handle async operations properly
+            for (const property of fetchData.docs) {
+                const propertyRef = doc(db, "users", user.email, "properties", property.id);
+                const approvedRef = collection(propertyRef, "Approval");
+                
+                // Wait for the approved documents to be fetched
+                const pendingSnapshot = await getDocs(approvedRef);
+            
+                if (!pendingSnapshot.empty) {
+                    const approved = pendingSnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data(), // Include all data from the Approved document
+                    }));
+                    console.log("Approved:", approved);
+                    approvedProperties.push(...approved); 
+                }
+            }
+            let numberOfReviews = 0;
+            let within30Days = 0;
+            let collectDays = [];
+            let lastestReview = 0;
+            let listingCount = 0;
+            //loop through all properties
+            approvedProperties.forEach((property)=>{
+                const date = property.review_date
+                //count the property
+                listingCount ++;
 
-        console.log(data)
-        const priceCalculator = await axios.post("http://ec2-54-224-46-135.compute-1.amazonaws.com:5000/predict",data)
-        console.log("price Calculator:", priceCalculator.data)
+                //if there is a review
+                if(property.review_date){
+                    //function to check if it is within 30 days
+                    const withinRange = isDateWithin30Days(date)
+
+                    //count within the range
+                    if(withinRange){
+                            within30Days++;
+                     }
+
+                    numberOfReviews++;
+                    //array is used to see later for the latest review
+                    collectDays.push(date)
+                }
+
+            })
+
+            for(let day of collectDays){
+                if(dateConversion(day) > lastestReview){
+                    lastestReview = dateConversion(day)
+                }
+            }
+
+            lastestReview = formatDateToString(lastestReview)
+
+            // Prepare your data for the price calculation
+            const data = {
+                latitude: latitude,
+                longitude: longitude,
+                minimum_nights: 1,
+                room_type: roomTypeValue,
+                neighbourhood_group: cityValue,
+                neighbourhood: cityValue,
+                number_of_reviews: numberOfReviews,
+                last_review: lastestReview,
+                calculated_host_listings_count: listingCount,
+                availability_365: 365,
+                reviews_per_month: within30Days,
+            };
+    
+            console.log("com:", data)
+
+            const priceCalculatorResponse = await axios.post("https://airbnb-ml.onrender.com/predict", data);
+            console.log("Price Calculator:", priceCalculatorResponse.data);
+
+            const estimatePrice = priceCalculatorResponse.data.prediction
+            setNewPrice(Math.floor(estimatePrice))
+            setOpen(true);
+            // alert(`We predict the value of your home is ${priceCalculatorResponse.data}`);
+    
         } catch (error) {
-            console.error("Can not reach server!")
+            console.error("Cannot reach server!", error);
         }
+    };
+    
+
+
+    const PriceAdjustModal = () => {
+    return (
+        <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+    >
+        <Box className={styles.modal}>
+       <Typography>We predict the value of your home is ${newPrice}</Typography>
+        <div className={styles.button}>
+          <Button  sx={{ m: 2 }} 
+            onClick={() => {
+                setValue("pricePerNight",newPrice)
+                setOpen(false)}}
+                >
+            Yes
+          </Button>
+          <Button  sx={{ m: 2 }} onClick={() => setOpen(false)}>
+            No
+          </Button>
+        </div>
+      </Box>
+    </Modal>
+    )
     }
 
+    const previousValues = useRef({ addressValue, cityValue, stateValue });
+
     useEffect(() => {
-        const location = async () => {
+        const fetchLocation = async () => {
             const token = "AIzaSyAqOK9SIpnzoE5Sf_qwcQQwejGybGyilUo";
             try {
                 const fetchData = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addressValue},${cityValue},${stateValue}&key=${token}`);
-                console.log("data", fetchData.data);
-                const data = fetchData.data
-                const location = data.results[0].geometry.location 
-                setLatitude(location.lat);
-                setLongitude(location.lng)
-                console.log("log",location)
-
+                const data = fetchData.data;
+    
+                // Check if there are results and the geometry object exists
+                if (data.results && data.results.length > 0 && data.results[0].geometry) {
+                    const location = data.results[0].geometry.location;
+                    setLatitude(location.lat);
+                    setLongitude(location.lng);
+                } else {
+                    console.warn("No location results found for the specified address.");
+                }
             } catch (error) {
                 console.error("Error fetching data:", error.response ? error.response.data : error.message);
             }
         };
-        location();
+    
+        // Only fetch location if address, city, or state changes
+        if (
+            previousValues.current.addressValue !== addressValue ||
+            previousValues.current.cityValue !== cityValue ||
+            previousValues.current.stateValue !== stateValue
+        ) {
+            fetchLocation();
+            previousValues.current = { addressValue, cityValue, stateValue };
+        }
     }, [addressValue, cityValue, stateValue]);
     
     
@@ -201,7 +319,7 @@ export const AdvertiseProperty = () => {
                 </Typography>
                 <Box sx={column} >
                     {/* Property Name Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography gutterBottom>
                             Property Name
                         </Typography>
@@ -217,7 +335,7 @@ export const AdvertiseProperty = () => {
                     </Box>
                     
                     {/* Address Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                             Address
                         </Typography>
@@ -233,7 +351,7 @@ export const AdvertiseProperty = () => {
                     </Box>
                     
                     {/* City Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                             City
                         </Typography>
@@ -249,7 +367,7 @@ export const AdvertiseProperty = () => {
                     </Box>
                     
                     {/* State Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                     <Typography variant="subtitle1" gutterBottom>
                         State
                     </Typography>
@@ -259,6 +377,7 @@ export const AdvertiseProperty = () => {
                         required
                         render={({ field }) => (
                             <Autocomplete
+                                className={styles.container}
                                 {...field}
                                 options={states.map((state) => state.name)} // State names directly as options
                                 onChange={(_, selectedOption) => {
@@ -285,7 +404,7 @@ export const AdvertiseProperty = () => {
 
                     
                     {/* Zip Code Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                             Zip Code
                         </Typography>
@@ -301,7 +420,7 @@ export const AdvertiseProperty = () => {
                     </Box>
 
                     {/* Latitude Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                             Latitude
                         </Typography>
@@ -313,7 +432,7 @@ export const AdvertiseProperty = () => {
                         />
                     </Box>
                     {/* Longitude Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                             Longitude
                         </Typography>
@@ -326,31 +445,33 @@ export const AdvertiseProperty = () => {
                         />
                     </Box>
                     {/* Room Type */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                         Type of Room
                         </Typography>
-                        <FormControl fullWidth>
+                        <FormControl className={styles.container} fullWidth>
                             <Select
                                 {...register("roomType", { required: "Room type is required" })} // Register the select input
                                 inputProps={{ name: 'roomType' }}
+                                value={ roomTypeValue }
                                 sx={{
                                     width: "300px",
                                     height: "43px",
                                     background: "white",
-                                    marginLeft: "10px",
-                                    border: ".2px black solid"
+                                    border: ".2px black solid",
+                                  
                                 }}
                             >
                                 <MenuItem value="Entire home/apt">Entire home/apt</MenuItem>
                                 <MenuItem value="Private room">Private room</MenuItem>
+                                
                             </Select>
                         </FormControl>
                     </Box>
 
                     
                     {/* Price per Night Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                             Price per Night
                         </Typography>
@@ -375,9 +496,10 @@ export const AdvertiseProperty = () => {
                             <Button sx={{width:"100px"}} onClick={()=>priceCalculator()}>Price Estimator</Button>
                         </div>
                     </Box>
-                    
+                    <PriceAdjustModal/>
+
                     {/* Contact Email Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                             Contact Email
                         </Typography>
@@ -398,7 +520,7 @@ export const AdvertiseProperty = () => {
                     </Box>
                     
                     {/* Description Field */}
-                    <Box width="100%" height="200px" marginBottom="16px">
+                    <Box width="100%" height="200px" marginBottom="16px" display="flex" flexDirection="column" alignItems="center">
                         <Typography variant="subtitle1" gutterBottom>
                             Description
                         </Typography>
@@ -416,7 +538,7 @@ export const AdvertiseProperty = () => {
                     </Box>
                     
                     {/* Image Upload Field */}
-                    <Box width="100%" marginBottom="16px">
+                    <Box className={styles.container}>
                         <Typography variant="subtitle1" gutterBottom>
                             Property Images
                         </Typography>

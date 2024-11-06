@@ -15,7 +15,6 @@ import { storage } from '../../api/firebase-config';
 import { v4 as uuidv4 } from 'uuid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './properties.module.scss';
-import axios from 'axios';
 
 export const Properties = () => {
     const [imageUrls, setImageUrls] = useState([]);
@@ -41,20 +40,6 @@ export const Properties = () => {
         fetchData();
     }, [user]);
 
-    useEffect(() => {
-       // console.log ( "calling information: ")
-
-        const retrieveData = async () => {
-            try{
-                const fetch = axios.post( "http://ec2-54-164-148-130.compute-1.amazonaws.com:5000/predict")
-               console.log ( "calling information: ", fetch.data)
-            } catch (error){
-                console.error("Could not connect")
-            }
-        }
-
-        retrieveData()
-    },[])
 
     const {
         register,

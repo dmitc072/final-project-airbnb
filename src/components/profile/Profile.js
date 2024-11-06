@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import {
     Box,
     Button,
@@ -29,6 +29,7 @@ export const Profile = () => {
     const [open, setOpen] = useState(false);
     const [firstLoginOpen, setFirstLoginOpen] = useState(false);
     const [changeRequest, setChangeRequest] = useState(false);
+    const phoneInputRef = useRef(null);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -48,6 +49,7 @@ export const Profile = () => {
         handleSubmit,
         reset,
     } = useForm({
+        mode: "onBlur",
         defaultValues: {
             firstName: user?.firstName || "",
             lastName: user?.lastName || "",
@@ -62,7 +64,6 @@ export const Profile = () => {
             hostIsVerified:hostIsVerified
         }
     });
-console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileComplete)
     
 
 
@@ -105,10 +106,9 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
     
 
     const onSubmit = async (data) => {
-        console.log("Form Submitted Data:", data);
     
-        if (data.phoneNumber.length < 10) {
-            console.log("Phone number too short");
+        if (data.phoneNumber.length < 10 && !data.phoneNumber.length===0) {
+            console.log("Phone number is too short!");
             return;
         }
     
@@ -195,7 +195,6 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
     };
 
     const checkHost = (data) => { //checks on submit
-        console.log("Check Host Data:", data);
         if (data.isHostChecked && !hostIsVerified) {
             handleOpen(); //handles Modal
             dispatch(setHostIsVerified(true))
@@ -316,7 +315,7 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
                                 fullWidth
                             />
                         </Box>
-                        <Box mb={2}>
+                        <Box mb={2} sx={{width:"320px"}}>
                             <Typography>Phone Number</Typography>
                             <Controller
                                 control={control}
@@ -331,6 +330,7 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
                                     <>
                                         <PhoneInput
                                             {...field}
+                                            ref={phoneInputRef}
                                             country="us"
                                             value={field.value}
                                             onChange={(value) => field.onChange(value)}
@@ -338,10 +338,14 @@ console.log("isRenterChecked", isRenterChecked, " isProfileComplete", isProfileC
                                             inputProps={{
                                                 className: styles.formcontrol,
                                             }}
-                                            containerStyle={{ width: '100%' }}
+                                            containerStyle={{ width: '100%', marginLeft:"10px" }}
                                             inputStyle={{ height: '45px', background:"white", color:"black" }}
                                         />
-                                       
+                                       {errors.phoneNumber && (
+                                            <Typography variant="body2" color="error">
+                                                {errors.phoneNumber.message}
+                                            </Typography>
+                                        )}
                                     </>
                                 )}
                             />

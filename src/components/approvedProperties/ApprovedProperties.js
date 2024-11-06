@@ -15,7 +15,16 @@ const { user } = useSelector((state) => state.auth);
 const [loading, setLoading] = useState(true)
 const {isHostChecked, isRenterChecked} = useSelector(state =>state.auth.user)
 
-const filterApprovedPropertiesData = approvedPropertiesData.filter((property) => property.approved[0]?.requestingUser === user.email)
+const filterApprovedPropertiesData = approvedPropertiesData.filter((property) => {
+    // Filter the `approved` array to include only those with `requestingUser` matching `user.email`
+    const matchingApproved = property.approved.filter((individualApproved) => {
+       // console.log("Individual Approved:", JSON.stringify(individualApproved));
+        return individualApproved.requestingUser === user.email;
+    });
+    
+    return matchingApproved.length > 0;
+});
+
 
 //retrieves the data for from Approved collection for Tentants/Renter
 useEffect(() => {
@@ -52,7 +61,6 @@ useEffect(() => {
                     );
                 })
             );
-
             setApprovedPropertiesData(locationArray);
             setLoading(false)
         } catch (error) {
@@ -62,7 +70,6 @@ useEffect(() => {
 
     fetchData();
 }, []);
-
 
 
       console.log("Properties: ",filterApprovedPropertiesData)

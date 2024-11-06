@@ -3,7 +3,7 @@ import { AppContext } from "../../../context.js";
 import { collection, getDocs } from "firebase/firestore"; 
 import { db } from "../../../api/firebase-config.js";
 import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { Filter } from "../searchResults/Filter.js";
+import { Filter } from "./Filter.js";
 
 export const SearchBar = ({ setSearchResult }) => {
   const { row, column, states } = useContext(AppContext);
@@ -12,6 +12,7 @@ export const SearchBar = ({ setSearchResult }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); 
   const [open,setOpen] = useState(false)
+  const [priceValue, setPriceValue] = useState([0, 1000]);
 
  
   // Fetches all locations
@@ -32,7 +33,7 @@ export const SearchBar = ({ setSearchResult }) => {
           locationSnapshot.forEach(locationDoc => {
             locationsArray.push({...locationDoc.data(),user:userDoc.id}); // Push data into the temporary array and retrieve the user
           });
-         // console.log("location array ",locationsArray)
+          console.log("location array ",locationsArray)
         }
       });
   
@@ -63,7 +64,14 @@ export const SearchBar = ({ setSearchResult }) => {
       result.zipCode?.toLowerCase() === normalizedSearch
     );
     
-    setSearchResult(results);
+    const filterResults = results.filter(result =>
+      result.pricePerNight >= priceValue[0] &&
+      result.pricePerNight <= priceValue[1]
+
+    )
+
+
+    setSearchResult(filterResults);
     //console.log('Search Results:', results, location, search);
   }    
   
@@ -89,7 +97,7 @@ export const SearchBar = ({ setSearchResult }) => {
           <Button onClick={() => setOpen(true)}>
             Filter
           </Button>
-          <Filter open={open} setOpen={setOpen}/>
+          <Filter open={open} setOpen={setOpen} priceValue={priceValue} setPriceValue={setPriceValue}/>
         </Box>
       </Box>
     </>

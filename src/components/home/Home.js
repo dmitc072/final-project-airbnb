@@ -4,8 +4,10 @@ import { useState} from "react"
 import { PendingApprovalMessages } from '../pendingApproval/PendingApprovalMessages.js';
 import {ChangeOfPrice} from '../changeOfPrice/ChangeOfPrice.js'
 
+
 export const Home = () => {
     const [searchResult, setSearchResult] = useState([]);
+
 
 
     return (
@@ -14,6 +16,7 @@ export const Home = () => {
             <ChangeOfPrice/>
             <SearchBar setSearchResult={setSearchResult} /> {/* Passing setSearchResult as a parameter */}
             <SearchResults searchResult={searchResult} />
+          
             
         </>
     );

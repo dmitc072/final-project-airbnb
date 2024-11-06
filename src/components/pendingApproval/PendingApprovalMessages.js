@@ -55,6 +55,7 @@ export const PendingApprovalMessages = () => { // Ensure the component name is c
     }, [user, pendingApprovalMessage, dispatch]);
 
     useEffect(() => {
+        console.log(showAlert, message)
         if (!showAlert && message.length > 0) {
             setShowAlert(true);
             alert(message.map(item => `${item.propertyName} is pending approval`).join("\n"));

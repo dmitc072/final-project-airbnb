@@ -87,14 +87,23 @@ export const PendingApprovalforHost = () => {
     
 
     const approveRequest = async (pendingProperty, pendingRequestID) => {
-        const querySnapshot = doc(db,"users",user.email,"properties",pendingProperty.id,"PendingApproval",pendingRequestID)
+        const querySnapshot = doc(db,"users",user.email,"properties",pendingProperty.id,"PendingApproval",pendingRequestID);
         const copyData = await getDoc(querySnapshot)
+        const getPriceSnapshot = doc(db,"users",user.email,"properties",pendingProperty.id);
+        const getPrice = await getDoc(getPriceSnapshot)
+        const pricePerNight = getPrice.data().pricePerNight;
+
         //console.log("copied data: ",copyData.data())
         const approvalDoc = doc(db,"users",user.email,"properties",pendingProperty.id,"Approval",pendingRequestID)
-        await setDoc(approvalDoc,
-            copyData.data(),
-            {merge:true}
-        )
+
+        await setDoc(
+            approvalDoc,
+            {
+                ...copyData.data(), 
+                pricePerNight       
+            },
+            { merge: true }        
+        );
         
         await deleteDoc(querySnapshot)
         console.log("Deleted requested");

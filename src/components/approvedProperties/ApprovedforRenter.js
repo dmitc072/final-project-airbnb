@@ -20,7 +20,7 @@ export const ApprovedforRenter = ({filterApprovedPropertiesData}) => {
             <RatingModal openRatingModal={openRatingModal} setOpenRatingModal={setOpenRatingModal} data={data}/>
 
             <div className={styles.container}>
-                <Typography variant="h5">Approved Property Request to Rent</Typography>
+                <Typography sx={{fontWeight:"bold"}} variant="h5">Approved Property Request to Rent</Typography>
                 <br/>
                 {filterApprovedPropertiesData.map((approvedProperty) => (
                     <div key={approvedProperty.propertyId} className={styles.approvedProperties}>
