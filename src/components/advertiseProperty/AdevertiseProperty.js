@@ -257,7 +257,7 @@ export const AdvertiseProperty = () => {
 
     useEffect(() => {
         const fetchLocation = async () => {
-            const token = "AIzaSyAqOK9SIpnzoE5Sf_qwcQQwejGybGyilUo";
+            const token = "";
             try {
                 const fetchData = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addressValue},${cityValue},${stateValue}&key=${token}`);
                 const data = fetchData.data;
