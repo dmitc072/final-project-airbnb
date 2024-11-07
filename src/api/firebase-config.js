@@ -53,5 +53,4 @@ const storage = getStorage(app);
 // }
 
 export { auth, db, storage, functions};
-export const placesKey = 'AIzaSyD4fo-IYKa3bRUTwFotYVA41zLE_ByJuKM';
 export default app;
