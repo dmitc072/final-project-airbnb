@@ -63,10 +63,14 @@ export const ApprovedforRenter = ({filterApprovedPropertiesData}) => {
                             {approvedProperty.approved.map((approved,index) =>(
                                 <div key={index} className={styles.center}>  
                                     <div className={styles.row}>
+                                    <div className={styles.row}>
                                         <Typography>From:</Typography>
                                         <div >{approved.fromDate}</div>
+                                    </div>
+                                    <div className={styles.row}>
                                         <Typography>To:</Typography>
                                         <div >{approved.toDate}</div>
+                                    </div>
                                         
                                         <div className={styles.button}>
                                             {/*compareDateStringToToday() disables it, if it is in the future */}

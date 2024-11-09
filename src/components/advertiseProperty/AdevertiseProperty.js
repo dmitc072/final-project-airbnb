@@ -260,12 +260,14 @@ export const AdvertiseProperty = () => {
     useEffect(() => {
         const fetchLocation = async () => {
             if(zipValue.length === 5){
+                
                 let token = localStorage.getItem('token');
                 //token is stored as a string so the "" show in the axios call, I have to remove it by removing ""
                 token = token.replace(/"/g, '');
 
         
-                try {                                   
+                try {               
+                    //https://geocode.maps.co/                    
                     const fetchData = await axios.get(`https://geocode.maps.co/search?q=${addressValue},${cityValue},${stateValue}&api_key=${token}`);
                     const data = fetchData.data;
                     //console.log("data:", data)

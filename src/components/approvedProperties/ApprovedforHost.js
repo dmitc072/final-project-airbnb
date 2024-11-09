@@ -85,10 +85,14 @@ export const ApprovedforHost = () => {
                         {approvedProperty.availability.map((approved,index) =>(
                             <div key={index} className={styles.center}>  
                                 <div className={styles.row}>
-                                    <Typography>From:</Typography>
-                                    <div >{approved.fromDate}</div>
-                                    <Typography>To:</Typography>
-                                    <div >{approved.toDate}</div>
+                                    <div className={styles.row}>
+                                        <Typography>From:</Typography>
+                                        <div >{approved.fromDate}</div>
+                                    </div>
+                                    <div className={styles.row}>
+                                        <Typography>To:</Typography>
+                                        <div >{approved.toDate}</div>
+                                    </div>
                                     {/* {console.log(approved.reviewMessage)} */}
                                     
                                     <div className={styles.button}>
