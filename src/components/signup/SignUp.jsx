@@ -12,7 +12,7 @@ import {
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, getDoc, setDoc } from "firebase/firestore"; 
 import { auth, db } from '../../api/firebase-config'; // Import auth and db
 import { useNavigate } from 'react-router-dom'; // Assuming you are using react-router-dom for navigation
 
@@ -76,7 +76,23 @@ export const Signup = () => {
             // Dispatch the action to set isRenterChecked to true
             //dispatch(setRenterChecked(true));   //removed because the initial loginSLice on user.js overwrites it   
              alert('User registered successfully');
-            //navigate("/signin")
+            // retrieve token
+            const fetchData = doc(db, "token", "F8wZv3cF4cdxxnUmCVkm")
+            try {
+                // Fetch the document
+                const tokenSnapshot = await getDoc(fetchData);
+                
+                // Check if the document exists and store data in localStorage
+                if (tokenSnapshot.exists()) {
+                    const tokenData = tokenSnapshot.data();
+                    localStorage.setItem('token', JSON.stringify(tokenData.geocode));
+                    console.log(tokenData.geocode, tokenData)
+                } else {
+                    console.log("No such document!");
+                }
+            } catch (error) {
+                console.error("Error fetching token data:", error);
+            }
             navigate('/dashboard/profile');
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
