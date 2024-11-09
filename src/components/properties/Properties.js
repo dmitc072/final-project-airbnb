@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './properties.module.scss';
 
+
 export const Properties = () => {
     const [imageUrls, setImageUrls] = useState([]);
     const { user } = useSelector((state) => state.auth);
@@ -126,7 +127,7 @@ export const Properties = () => {
         setImageUrls(urls);
         setError('');
     };
-    
+
     const handleRemoveImage = async (index) => {
         // Remove the selected image from the local array
         const updatedImages = [...imageUrls];
@@ -204,6 +205,13 @@ export const Properties = () => {
                                 display="flex"
                                 flexDirection="column"
                                 gap="16px"
+                                alignItems="center"
+                                marginLeft="-3%"
+                                sx={{
+                                   ' @media (max-width:344px)': {
+                                        width: '90%', 
+                                    }
+                                }}
                             >
                                 <TextField
                                     label="Property Name"

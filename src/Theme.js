@@ -110,11 +110,14 @@ export const theme = (mode) => createTheme({
         MuiTextField: {
             styleOverrides: {
                 root: {
-                    background:'white',
-                    width: '300px',
+                    background: 'white',
+                    width: '300px', // Default width
                     height: '40px',
                     margin: '10px',
                     borderRadius: '4px',
+                    '@media (max-width:600px)': { // Use media query directly
+                        width: 'fit-content', // Width on small screens and up
+                    },
                     '& .MuiOutlinedInput-root': {
                         '& fieldset': {
                             borderColor: '#3B3C86', // Consistent border color
@@ -126,7 +129,7 @@ export const theme = (mode) => createTheme({
                             borderColor: '#3B3C86',
                         },
                         '& input': {
-                            color: mode === 'dark' ? 'black' : 'black' ,
+                            color: 'black',
                             padding: '10px', // Consistent padding
                         },
                     },
