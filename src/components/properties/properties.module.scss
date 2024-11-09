@@ -86,3 +86,9 @@ margin-top: 90px;
 .button{
     max-width:300px
 }
+
+.textField {
+    @media screen and (max-width:600px){
+        width:90%
+    }
+}
