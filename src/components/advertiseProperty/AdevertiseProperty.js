@@ -70,6 +70,8 @@ export const AdvertiseProperty = () => {
     const addressValue = watch('address')
     const cityValue = watch('city')
     const stateValue = watch('state')
+    const zipValue = watch('zipCode')
+
     //const latitudeValue = watch('latitude');
     //const longitudeValue = watch('longitude');
     const roomTypeValue = watch('roomType');
@@ -154,7 +156,7 @@ export const AdvertiseProperty = () => {
                         id: doc.id,
                         ...doc.data(), // Include all data from the Approved document
                     }));
-                    console.log("Approved:", approved);
+                    //console.log("Approved:", approved);
                     approvedProperties.push(...approved); 
                 }
             }
@@ -209,10 +211,10 @@ export const AdvertiseProperty = () => {
                 reviews_per_month: within30Days,
             };
     
-            console.log("com:", data)
+            //console.log("com:", data)
 
             const priceCalculatorResponse = await axios.post("https://airbnb-ml.onrender.com/predict", data);
-            console.log("Price Calculator:", priceCalculatorResponse.data);
+            //console.log("Price Calculator:", priceCalculatorResponse.data);
 
             const estimatePrice = priceCalculatorResponse.data.prediction
             setNewPrice(Math.floor(estimatePrice))
@@ -253,25 +255,42 @@ export const AdvertiseProperty = () => {
     )
     }
 
-    const previousValues = useRef({ addressValue, cityValue, stateValue });
+    const previousValues = useRef({ addressValue, cityValue, stateValue, zipValue });
 
     useEffect(() => {
         const fetchLocation = async () => {
-            const token = "";
-            try {
-                const fetchData = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addressValue},${cityValue},${stateValue}&key=${token}`);
-                const data = fetchData.data;
-    
-                // Check if there are results and the geometry object exists
-                if (data.results && data.results.length > 0 && data.results[0].geometry) {
-                    const location = data.results[0].geometry.location;
-                    setLatitude(location.lat);
-                    setLongitude(location.lng);
-                } else {
-                    console.warn("No location results found for the specified address.");
+            if(zipValue.length === 5){
+                let token = localStorage.getItem('token');
+                //token is stored as a string so the "" show in the axios call, I have to remove it by removing ""
+                token = token.replace(/"/g, '');
+
+        
+                try {                                   
+                    const fetchData = await axios.get(`https://geocode.maps.co/search?q=${addressValue},${cityValue},${stateValue}&api_key=${token}`);
+                    const data = fetchData.data;
+                    //console.log("data:", data)
+                    if(data.length > 0){
+                    //for each address, check if the addess matches the zipCode
+                        for(let address of data){
+                        const getZip = address.display_name.split(", ")
+                        console.log("get Zip:", getZip)
+                            if (getZip.includes(zipValue)) {
+                                const location = address;
+                                setLatitude(location.lat);
+                                setLongitude(location.lon);
+                                console.log("address,", location)
+                            }
+                            else {
+                                alert("Zip Code may be wrong!");
+                            }
+                        
+                        }
+                    } else {
+                        alert("Address is not in the Database!")
+                    } 
+                } catch (error) {
+                    console.error("Error fetching data:", error.response ? error.response.data : error.message);
                 }
-            } catch (error) {
-                console.error("Error fetching data:", error.response ? error.response.data : error.message);
             }
         };
     
@@ -279,12 +298,13 @@ export const AdvertiseProperty = () => {
         if (
             previousValues.current.addressValue !== addressValue ||
             previousValues.current.cityValue !== cityValue ||
-            previousValues.current.stateValue !== stateValue
+            previousValues.current.stateValue !== stateValue ||
+            previousValues.current.zipValue !== zipValue
         ) {
             fetchLocation();
             previousValues.current = { addressValue, cityValue, stateValue };
         }
-    }, [addressValue, cityValue, stateValue]);
+    }, [zipValue]);
     
     
     return (

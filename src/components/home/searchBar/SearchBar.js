@@ -33,7 +33,7 @@ export const SearchBar = ({ setSearchResult }) => {
           locationSnapshot.forEach(locationDoc => {
             locationsArray.push({...locationDoc.data(),user:userDoc.id}); // Push data into the temporary array and retrieve the user
           });
-          console.log("location array ",locationsArray)
+         // console.log("location array ",locationsArray)
         }
       });
   
