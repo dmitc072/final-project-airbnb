@@ -96,7 +96,11 @@ export const ApprovedforHost = () => {
                                     {/* {console.log(approved.reviewMessage)} */}
                                     
                                     <div className={styles.button}>
-                                        <Button disabled={!approved.reviewMessage} onClick={()=>reviewMessage(approvedProperty, approved.reviewMessage)}>{(approved.reviewMessage) ? "See Review": "No Review"}</Button>
+                                        <Button disabled={!approved.reviewMessage}
+                                         sx={{"&.MuiButton-root.Mui-disabled": {
+                                            color:"grey"
+                                         }}}
+                                         onClick={()=>reviewMessage(approvedProperty, approved.reviewMessage)}>{(approved.reviewMessage) ? "See Review": "No Review"}</Button>
                                     </div>
                                 </div>
 
