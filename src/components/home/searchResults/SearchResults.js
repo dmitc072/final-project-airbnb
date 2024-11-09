@@ -91,7 +91,7 @@ export const SearchResults = ({ searchResult }) => {
       {searchResult.length > 0 ?
       
       (<Box sx={{ ...row, display: 'flex', flexWrap: 'wrap', alignItems:"flex-start", gap: 2 }}>
-        {console.log("length", searchResult.length)}
+        {console.log("length", searchResult)}
         {searchResult.map((result, index) => (
           <Box
             key={index}
@@ -126,9 +126,13 @@ export const SearchResults = ({ searchResult }) => {
                 <Typography>{result.zipCode}</Typography>
               </div>
               <div>
-                <Typography variant="h6"># of Rooms:</Typography>
-                <Typography>{result.rooms}</Typography>
+                <Typography variant="h6">Type of Room:</Typography>
+                <Typography>{result.roomType}</Typography>
               </div>
+            </div>
+            <div>
+                <Typography variant="h6">Description:</Typography>
+                <Typography>{result.description}</Typography>
             </div>
             <Typography variant="h6">Price per Night:</Typography>
             <Typography>{`$${result.pricePerNight}`}</Typography>

@@ -16,7 +16,7 @@ export const ApprovedforHost = () => {
             try {
                 // Create a reference to the collection of properties
                 const propertySnapshot = await getDocs(collection(db, "users", user.email, "properties"));
-                console.log(user.email);
+                //console.log(user.email);
                 let totalInvestment = 0;
                 if (!propertySnapshot.empty) {
                     // Map through each property, fetching its ApprovedApproval documents

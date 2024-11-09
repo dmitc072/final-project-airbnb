@@ -15,7 +15,7 @@ export const PendingApprovalforHost = () => {
             try {
                 // Create a reference to the collection of properties
                 const propertySnapshot = await getDocs(collection(db, "users", user.email, "properties"));
-                console.log(propertySnapshot);
+               // console.log(propertySnapshot);
     
                 if (!propertySnapshot.empty) {
                     // Map through each property, fetching its PendingApproval documents

@@ -212,7 +212,7 @@ export const AdvertiseProperty = () => {
             };
     
             //console.log("com:", data)
-
+            alert("Waiting to retrieve price!")
             const priceCalculatorResponse = await axios.post("https://airbnb-ml.onrender.com/predict", data);
             //console.log("Price Calculator:", priceCalculatorResponse.data);
 

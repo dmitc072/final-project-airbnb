@@ -72,7 +72,7 @@ useEffect(() => {
 }, []);
 
 
-      console.log("Properties: ",filterApprovedPropertiesData)
+     //console.log("Properties: ",filterApprovedPropertiesData)
     // console.log("isHostChecked: ",isHostChecked, "isRenterChecked: ",isRenterChecked )
 
     return (
