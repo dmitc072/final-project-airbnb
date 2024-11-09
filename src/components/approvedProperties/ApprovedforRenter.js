@@ -74,7 +74,11 @@ export const ApprovedforRenter = ({filterApprovedPropertiesData}) => {
                                         
                                         <div className={styles.button}>
                                             {/*compareDateStringToToday() disables it, if it is in the future */}
-                                            <Button disabled={compareDateStringToToday(approved.toDate) || approved.reviewSent} onClick={()=>approveRequest(approvedProperty, approved.id)}>Leave Review</Button> 
+                                            <Button 
+                                             sx={{"&.MuiButton-root.Mui-disabled": {
+                                                color:"grey"
+                                             }}}
+                                             disabled={compareDateStringToToday(approved.toDate) || approved.reviewSent} onClick={()=>approveRequest(approvedProperty, approved.id)}>Leave Review</Button> 
                                         </div>
                                     </div>
                                 </div>
