@@ -115,9 +115,7 @@ export const theme = (mode) => createTheme({
                     height: '40px',
                     margin: '10px',
                     borderRadius: '4px',
-                    '@media (max-width:600px)': { // Use media query directly
-                        width: 'fit-content', // Width on small screens and up
-                    },
+                   
                     '& .MuiOutlinedInput-root': {
                         '& fieldset': {
                             borderColor: '#3B3C86', // Consistent border color

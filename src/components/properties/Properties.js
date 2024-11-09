@@ -210,10 +210,14 @@ export const Properties = () => {
                                 sx={{
                                    ' @media (max-width:344px)': {
                                         width: '90%', 
+                                    },
+                                    '@media (max-width:455px)': {
+                                        alignItems: "flex-start"
                                     }
                                 }}
                             >
-                                <TextField
+                                <TextField className={styles.textField}
+                              
                                     label="Property Name"
                                     {...register("propertyName", { required: "Property Name is required" })}
                                     defaultValue={property.propertyName}
@@ -221,7 +225,7 @@ export const Properties = () => {
                                     helperText={isSubmitted && errors.propertyName?.message}
                                     fullWidth
                                 />
-                                <TextField
+                                <TextField className={styles.textField}
                                     label="Address"
                                     {...register("address", { required: "Address is required" })}
                                     defaultValue={property.address}
@@ -229,7 +233,7 @@ export const Properties = () => {
                                     helperText={isSubmitted && errors.address?.message}
                                     fullWidth
                                 />
-                                <TextField
+                                <TextField className={styles.textField}
                                     label="City"
                                     {...register("city", { required: "City is required" })}
                                     defaultValue={property.city}
@@ -237,7 +241,7 @@ export const Properties = () => {
                                     helperText={isSubmitted && errors.city?.message}
                                     fullWidth
                                 />
-                                <TextField
+                                <TextField className={styles.textField}
                                     label="State"
                                     {...register("state", { required: "State is required" })}
                                     defaultValue={property.state}
@@ -245,7 +249,7 @@ export const Properties = () => {
                                     helperText={isSubmitted && errors.state?.message}
                                     fullWidth
                                 />
-                                <TextField
+                                <TextField className={styles.textField}
                                     label="Zip Code"
                                     {...register("zipCode", { required: "Zip Code is required" })}
                                     defaultValue={property.zipCode}
@@ -253,7 +257,7 @@ export const Properties = () => {
                                     helperText={isSubmitted && errors.zipCode?.message}
                                     fullWidth
                                 />
-                                <TextField
+                                <TextField className={styles.textField}
                                     label="Price per Night"
                                     {...register("pricePerNight", { required: "Price per Night is required" })}
                                     defaultValue={property.pricePerNight}
@@ -261,7 +265,7 @@ export const Properties = () => {
                                     helperText={isSubmitted && errors.pricePerNight?.message}
                                     fullWidth
                                 />
-                                <TextField
+                                <TextField className={styles.textField}
                                     label="Description"
                                     {...register("description", { required: "Description is required" })}
                                     defaultValue={property.description}
@@ -271,7 +275,7 @@ export const Properties = () => {
                                     multiline
                                     rows={4}
                                 />
-                                <TextField className={styles.email}
+                                <TextField className={styles.textField}
                                     sx={{marginTop:"90px"}}
                                     label="Contact Email"
                                     {...register("contactEmail", { required: "Contact Email is required" })}
