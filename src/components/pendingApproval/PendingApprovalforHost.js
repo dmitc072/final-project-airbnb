@@ -142,12 +142,16 @@ export const PendingApprovalforHost = () => {
                         {pendingProperty.availability.map((pending,index) =>(
                             <div key={index} className={styles.center}>  
                                 <div className={styles.row}>
-                                    <Typography>From:</Typography>
-                                    <div >{pending.fromDate}</div>
-                                    <Typography>To:</Typography>
-                                    <div >{pending.toDate}</div>
+                                    <div className={styles.row}>
+                                        <Typography>From:</Typography>
+                                        <div >{pending.fromDate}</div>
+                                    </div>
+                                    <div className={styles.row}>
+                                        <Typography>To:</Typography>
+                                        <div >{pending.toDate}</div>
+                                    </div>
                                 </div>
-                                <div className={styles.button}>
+                                <div className={styles.row}>
                                     <Button onClick={()=>approveRequest(pendingProperty, pending.id)}>Approve</Button>
                                     <Button onClick={() => deleteRequest(pendingProperty, pending.id)}>Disapprove</Button>
                                 </div>
