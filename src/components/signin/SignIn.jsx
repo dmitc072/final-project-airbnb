@@ -12,7 +12,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom'; 
 import {signinUser} from "../../features/users/users";
 import { useDispatch } from 'react-redux';
-
+import { db } from '../../api/firebase-config'; // Adjust the import based on your actual file structure
+import {doc, getDoc } from "firebase/firestore";
 
 
 
@@ -56,6 +57,22 @@ export const SignIn = () =>{
             const {isProfileComplete} = response.data;
 
             if (status === 200) {
+                    const fetchData = doc(db, "token", "F8wZv3cF4cdxxnUmCVkm")
+                    try {
+                        // Fetch the document
+                        const tokenSnapshot = await getDoc(fetchData);
+                        
+                        // Check if the document exists and store data in localStorage
+                        if (tokenSnapshot.exists()) {
+                            const tokenData = tokenSnapshot.data();
+                            localStorage.setItem('token', JSON.stringify(tokenData.geocode));
+                            console.log(tokenData.geocode, tokenData)
+                        } else {
+                            console.log("No such document!");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching token data:", error);
+                    }
                     navigate(!isProfileComplete ? '/dashboard/profile' : '/dashboard');
                          
              } else if (status === 201) {
