@@ -400,6 +400,7 @@ export const Profile = () => {
                                             name="isRenterChecked"
                                             color="black"
                                             disabled
+                                            
                                         />
                                     }
                                     label="Renter"
