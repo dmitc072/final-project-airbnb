@@ -406,7 +406,7 @@ export const AdvertiseProperty = () => {
                                     field.onChange(selectedOption); // Pass the selected state name
                                 }}
                                 renderInput={(params) => (
-                                    <TextField 
+                                    <TextField className={styles.arrow}
                                         {...params} 
                                         sx={{
                                             "& .MuiOutlinedInput-root": {
@@ -446,7 +446,7 @@ export const AdvertiseProperty = () => {
                         <Typography variant="subtitle1" gutterBottom>
                             Latitude
                         </Typography>
-                        <TextField 
+                        <TextField   className={styles.coord}
                             {...register("latitude")}
                             value={latitude}
                             disabled
@@ -459,7 +459,7 @@ export const AdvertiseProperty = () => {
                             Longitude
                         </Typography>
                         
-                        <TextField 
+                        <TextField   className={styles.coord}
                             {...register("longitude")}
                             value={longitude}
                             disabled
@@ -511,7 +511,7 @@ export const AdvertiseProperty = () => {
                                 placeholder="Enter price per night"
                                 type="number"
                                 InputProps={{
-                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                    startAdornment: <InputAdornment className={styles.sign} position="start">$</InputAdornment>,
                                 }}
                                 error={isSubmitted && !!errors.pricePerNight}
                                 helperText={isSubmitted && errors.pricePerNight?.message}

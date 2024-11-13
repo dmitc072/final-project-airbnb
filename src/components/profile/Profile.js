@@ -382,7 +382,7 @@ export const Profile = () => {
                             <FormGroup>
                                 <FormControlLabel
                                     control={
-                                        <Checkbox
+                                        <Checkbox className={styles.checkbox}
                                             checked={isHostChecked}
                                             onChange={(e) => dispatch(setHostChecked(e.target.checked))}
                                             name="isHostChecked"
@@ -394,7 +394,7 @@ export const Profile = () => {
                                 />
                                 <FormControlLabel
                                     control={
-                                        <Checkbox
+                                        <Checkbox className={styles.checkbox}
                                             checked={isRenterChecked}
                                             onChange={(e) => dispatch(setRenterChecked(e.target.checked))}
                                             name="isRenterChecked"

@@ -29,3 +29,18 @@
     flex-direction:column;
     align-items:center;
 }
+
+[data-toolpad-color-scheme="dark"] {
+    .coord {
+        background-color: lightgrey; /* Dark mode background color */
+        color: black; /* Optional: Adjust text color for dark mode */
+    }
+
+    .sign p{
+        color:black
+    }
+
+    .arrow svg{
+        color:black
+    }
+}
