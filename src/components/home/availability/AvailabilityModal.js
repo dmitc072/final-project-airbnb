@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyData }) => {
   const onClose = () => setOpenRentModal(false);
   const { user } = useSelector((state) => state.auth);
-
+  const now = dayjs()
 
   const {
     setValue,
@@ -40,6 +40,11 @@ export const AvailabilityModal = ({ openRentModal, setOpenRentModal, propertyDat
             alert("From date has to be before To Date!")
             return
         }
+
+        if (toDate.isBefore(now, "day")){
+          alert("Cannot be a past date!")
+          return
+      }
 
         const formatFromDate = fromDate.format('MM/DD/YYYY')
         const formattedToDate = toDate.format('MM/DD/YYYY');
