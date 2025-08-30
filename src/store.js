@@ -1,6 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
-import userSlice from "./features/users/users"; // Ensure the import is correct
+import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import userSlice from './features/users/users.js';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // Use localStorage as the default
 
