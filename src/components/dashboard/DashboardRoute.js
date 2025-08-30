@@ -1,4 +1,4 @@
-import React from 'react';
+import { React } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { Dashboard } from './Dashboard';
