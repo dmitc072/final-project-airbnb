@@ -21,7 +21,6 @@ React • Vite/CRA • Firebase (Auth, Firestore, Storage) • SCSS • Netlify
 - State via Context/Redux (note your choice here)
 - Data via Firebase SDK
 - Routing via React Router
-- Env via `.env` 
 
 ## Getting Started
 ```bash
