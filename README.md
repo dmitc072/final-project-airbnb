@@ -34,3 +34,6 @@ git clone https://github.com/dmitc072/final-project-airbnb.git
 cd final-project-airbnb
 npm install
 npm start
+
+## 📄 License
+This project is licensed under the [MIT License](https://github.com/dmitc072/repo-name/blob/main/LICENSE).
