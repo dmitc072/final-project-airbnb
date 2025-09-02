@@ -1,32 +1,36 @@
-# Rental Finder (React + Firebase)
+# Rental Finder 🏡
 
-A lightweight Airbnb-style app with listings, search/filters, auth, favorites, and booking flow.
+## 📌 Overview
+Rental Finder is an **Airbnb-style rental platform** where users can browse listings, filter results, and save favorites.  
+Built with **React, Firebase, Redux**, and deployed on **Netlify**, it demonstrates modern full-stack app development with real-time data.
 
-## Demo
-- Live: <https://nimble-babka-52d07d.netlify.app>
-- Video/GIF: <link>
+---
 
-## Stack
-React • Vite/CRA • Firebase (Auth, Firestore, Storage) • SCSS • Netlify
+## ⚙️ Tech Stack
+- **Frontend:** React, JavaScript (ES6+), HTML5, CSS3
+- **State Management:** Redux
+- **Backend & Auth:** Firebase (Auth, Firestore, Hosting)
+- **Deployment:** Netlify
 
-## Features
-- Email/password auth
-- Host & Guest flows
-- Listing create/edit with images
-- Search, filters, favorites
-- Responsive UI + route guards
+---
 
-## Architecture
-- `/src/features/*` feature folders (Listing, Auth, Booking, Search)
-- State via Context/Redux (note your choice here)
-- Data via Firebase SDK
-- Routing via React Router
+## 🚀 Features
+- 🔐 User authentication with Firebase  
+- 🏠 Browse, filter, and search rental listings  
+- ⭐ Save favorite properties  
+- 📱 Responsive design (mobile + desktop)  
+- ⚡ Real-time updates  
 
-## Getting Started
+---
+
+## 🖥️ Live Demo
+🔗 [Rental Finder on Netlify](https://nimble-babka-52d07d.netlify.app)  
+
+---
+
+## 📂 Installation & Setup
 ```bash
-npm i
-npm run dev
-# build
-npm run build
-# preview
-npm run preview
+git clone https://github.com/dmitc072/final-project-airbnb.git
+cd final-project-airbnb
+npm install
+npm start
