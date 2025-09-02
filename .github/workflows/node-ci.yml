@@ -1,0 +1,40 @@
+name: Node CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint (if present)
+        run: npm run lint --if-present
+
+      - name: Test (CI mode, if present)
+        run: npm run test --if-present -- --ci --watchAll=false
+
+      - name: Build (if present)
+        run: npm run build --if-present
+
+      - name: Upload build artifact (if it exists)
+        if: ${{ hashFiles('**/dist/**','**/build/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: |
+            dist
+            build
