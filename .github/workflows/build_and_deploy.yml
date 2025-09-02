@@ -1,0 +1,58 @@
+name: build_and_deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Required for GitHub Pages deploy
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: final-project-airbnb   # <-- change/remove if your app is elsewhere
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: final-project-airbnb/package-lock.json
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run tests (allow none)
+        run: npm test -- --ci --watchAll=false --passWithNoTests
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: final-project-airbnb/build  # <-- CRA output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
