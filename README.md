@@ -39,5 +39,13 @@ npm start
 ```
 ---
 
+## Sign-In
+You can create a user, or use the example account:
+```
+user: angilee@gmail.com
+password: !@123QWEqwe
+```
+---
+
 ## 📄 License
 This project is licensed under the [MIT License](https://github.com/dmitc072/final-project-airbnb/blob/main/LICENSE).
