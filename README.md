@@ -1,4 +1,6 @@
 # Rental Finder 🏡
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)  
+![Build: Passing](https://img.shields.io/badge/Build-Passing-brightgreen.svg)  
 
 ## 📌 Overview
 Rental Finder is an **Airbnb-style rental platform** where users can browse listings, filter results, and save favorites.  
