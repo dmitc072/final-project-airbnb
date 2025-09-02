@@ -5,7 +5,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# Required for GitHub Pages deploy
 permissions:
   contents: read
   pages: write
@@ -18,9 +17,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: final-project-airbnb   # <-- change/remove if your app is elsewhere
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,21 +26,21 @@ jobs:
         with:
           node-version: 18
           cache: npm
-          cache-dependency-path: final-project-airbnb/package-lock.json
+          cache-dependency-path: package-lock.json  # <-- repo root
 
       - name: Install deps
         run: npm ci
 
-      - name: Run tests (allow none)
+      - name: Test (pass even if none)
         run: npm test -- --ci --watchAll=false --passWithNoTests
 
       - name: Build
         run: npm run build
 
-      - name: Upload artifact
+      - name: Upload artifact (CRA build/)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: final-project-airbnb/build  # <-- CRA output
+          path: build   # <-- repo root build output
 
   deploy:
     needs: build
